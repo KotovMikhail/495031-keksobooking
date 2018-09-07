@@ -61,7 +61,7 @@ var createObject = function () {
   return obj;
 };
 
-var createCards = function () {
+var createCardsArr = function () {
   var cards = [];
   for (var i = 0; i < COUNT_CARDS; i++) {
     cards.push(createObject(i));
@@ -69,23 +69,40 @@ var createCards = function () {
   return cards;
 };
 
-var objects = createCards();
+var objects = createCardsArr();
 
 
 var mapPinList = document.querySelector('.map__pins'); //куда вставить метки
 var pinTemplate = document.querySelector('#pin') //шаблон метки
   .content
   .querySelector('.map__pin');
+var mapCard = document.querySelector('.map'); //куда вставить карточку
 var cardTemplate = document.querySelector('#card') // шаблон карточки
   .content
   .querySelector('.map__card');
-var fragment = document.createDocumentFragment(); //создан фрагмент
 
-for (var i = 0; i <= objects.length; i++) {
-  var pinElement = pinTemplate.cloneNode(true);
-  pinElement.children[0].src = objects[i].author.avatar;
-  pinElement.style.left = objects[i].location.x + 'px';
-  pinElement.style.top = objects[i].location.y + 'px';
-  pinElement.children[0].alt = objects[i].offer.title;
-  mapPinList.appendChild(pinElement);
-}
+var createPins = function () {
+  for (var i = 0; i < objects.length; i++) {
+    var fragmentPins = document.createDocumentFragment();
+    var pinElem = pinTemplate.cloneNode(true);
+    pinElem.children[0].src = objects[i].author.avatar;
+    pinElem.style.left = objects[i].location.x + 'px';
+    pinElem.style.top = objects[i].location.y + 'px';
+    pinElem.children[0].alt = objects[i].offer.title;
+    fragmentPins.appendChild(pinElem);
+    mapPinList.appendChild(fragmentPins);
+  }
+};
+
+createPins(objects);
+
+var createItem = function () {
+  var cardItem = cardTemplate.cloneNode(true);
+  mapCard.insertBefore(cardItem, mapPinList);
+  cardItem.querySelector('.popup__title').textContent = objects[0].offer.title;
+  cardItem.querySelector('.popup__text--address').textContent = objects[0].offer.address;
+  cardItem.querySelector('.popup__text--price').innerHTML = objects[0].offer.price + '&#x20bd/ночь';
+
+};
+
+createItem(objects);
