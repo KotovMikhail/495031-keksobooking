@@ -21,9 +21,6 @@ var IMAGE_NUM_RANGE = [1, 2, 3, 4, 5, 6, 7, 8];
 var getUnique = function (arr) {
   var uniqueEl = arr[getRandom(0, (arr.length))];
   arr.splice(arr.indexOf(uniqueEl), 1);
-  // for (var i = 1; i < imageNumber; i++) {
-  //   var img = 'img/avatars/user0' + IMAGE_NUM_RANGE[i] + '.png';
-  // }
   return uniqueEl;
 };
 
@@ -35,10 +32,9 @@ var compareRandom = function () {
   return Math.random() - 0.5;
 };
 
-var locationX = getRandom(MIN_LOCATION_X, MAX_LOCATION_X);
-var locationY = getRandom(MIN_LOCATION_Y, MAX_LOCATION_Y);
-
 var createObject = function () {
+  var locationX = getRandom(MIN_LOCATION_X, MAX_LOCATION_X);
+  var locationY = getRandom(MIN_LOCATION_Y, MAX_LOCATION_Y);
   var obj = {
     author: {
       avatar: 'img/avatars/user0' + getUnique(IMAGE_NUM_RANGE) + '.png'
@@ -46,7 +42,7 @@ var createObject = function () {
 
     offer: {
       title: getUnique(TITLE),
-      address: locationX + locationY,
+      address: locationX + ', ' + locationY,
       price: getRandom(MIN_PRICE, MAX_PRICE),
       type: TYPE[getRandom(0, TYPE.length - 1)],
       rooms: getRandom(MIN_ROOM, MAX_ROOM),
@@ -78,4 +74,4 @@ var createCards = function () {
 
 };
 
-console.log(createCards(createObject));
+createCards();
