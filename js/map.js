@@ -12,7 +12,7 @@ var MIN_PRICE = 1000;
 var MAX_PRICE = 1000000;
 var MIN_ROOM = 1;
 var MAX_ROOM = 5;
-var MIN_LOCATION_X = 300;
+var MIN_LOCATION_X = 100;
 var MAX_LOCATION_X = 900;
 var MIN_LOCATION_Y = 130;
 var MAX_LOCATION_Y = 630;
@@ -61,17 +61,31 @@ var createObject = function () {
   return obj;
 };
 
-createObject();
-
 var createCards = function () {
   var cards = [];
-
   for (var i = 0; i < COUNT_CARDS; i++) {
     cards.push(createObject(i));
   }
-
   return cards;
-
 };
 
-createCards();
+var objects = createCards();
+
+
+var mapPinList = document.querySelector('.map__pins'); //куда вставить метки
+var pinTemplate = document.querySelector('#pin') //шаблон метки
+  .content
+  .querySelector('.map__pin');
+var cardTemplate = document.querySelector('#card') // шаблон карточки
+  .content
+  .querySelector('.map__card');
+var fragment = document.createDocumentFragment(); //создан фрагмент
+
+for (var i = 0; i <= objects.length; i++) {
+  var pinElement = pinTemplate.cloneNode(true);
+  pinElement.children[0].src = objects[i].author.avatar;
+  pinElement.style.left = objects[i].location.x + 'px';
+  pinElement.style.top = objects[i].location.y + 'px';
+  pinElement.children[0].alt = objects[i].offer.title;
+  mapPinList.appendChild(pinElement);
+}
