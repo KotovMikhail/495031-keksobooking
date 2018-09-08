@@ -44,9 +44,9 @@ var createObject = function () {
       title: getUnique(TITLE),
       address: locationX + ', ' + locationY,
       price: getRandom(MIN_PRICE, MAX_PRICE),
-      type: TYPE[getRandom(0, TYPE.length - 1)],
+      type: TYPE[getRandom(0, TYPE.length)],
       rooms: getRandom(MIN_ROOM, MAX_ROOM),
-      guests: getRandom(1, 100),
+      guests: getRandom(1, 10),
       checkin: CHECK_TIME[getRandom(0, CHECK_TIME.length - 1)],
       checkout: CHECK_TIME[getRandom(0, CHECK_TIME.length - 1)],
       features: getRandom(1, FEATURES.length),
@@ -72,11 +72,11 @@ var createCardsArr = function () {
 var objects = createCardsArr();
 
 
-var mapPinList = document.querySelector('.map__pins'); //куда вставить метки
-var pinTemplate = document.querySelector('#pin') //шаблон метки
+var mapPinList = document.querySelector('.map__pins'); // куда вставить метки
+var pinTemplate = document.querySelector('#pin') // шаблон метки
   .content
   .querySelector('.map__pin');
-var mapCard = document.querySelector('.map'); //куда вставить карточку
+var mapCard = document.querySelector('.map'); // куда вставить карточку
 var cardTemplate = document.querySelector('#card') // шаблон карточки
   .content
   .querySelector('.map__card');
@@ -98,11 +98,32 @@ createPins(objects);
 
 var createItem = function () {
   var cardItem = cardTemplate.cloneNode(true);
+  var room = objects[0].offer.rooms;
+  var guest = objects[0].offer.guests;
+  console.log(guest);
   mapCard.insertBefore(cardItem, mapPinList);
   cardItem.querySelector('.popup__title').textContent = objects[0].offer.title;
   cardItem.querySelector('.popup__text--address').textContent = objects[0].offer.address;
   cardItem.querySelector('.popup__text--price').innerHTML = objects[0].offer.price + '&#x20bd/ночь';
+  if (objects[0].offer.type === 'flat') {
+    cardItem.querySelector('.popup__type').textContent = 'Квартира';
+  } else if (objects[0].offer.type === 'bungalo') {
+    cardItem.querySelector('.popup__type').textContent = 'Бунгало';
+  } else if (objects[0].offer.type === 'house') {
+    cardItem.querySelector('.popup__type').textContent = 'Дом';
+  } else {
+    cardItem.querySelector('.popup__type').textContent = 'Дворец';
+  }
 
+  if (room === 1 && guest === 1) {
+    cardItem.querySelector('.popup__text--capacity').textContent = room + ' комната для ' + guest + ' гостя';
+  } else if (room === 1 && guest >= 2) {
+    cardItem.querySelector('.popup__text--capacity').textContent = room + ' комната для ' + guest + ' гостей';
+  } else if (room === 2 && guest >= 2) {
+    cardItem.querySelector('.popup__text--capacity').textContent = room + ' комнаты для ' + guest + ' гостей';
+  } else if (room === 3 && guest >= 2) {
+    cardItem.querySelector('.popup__text--capacity').textContent = room + ' комнаты для ' + guest + ' гостей';
+  }
 };
 
 createItem(objects);
