@@ -4,6 +4,7 @@ map.classList.remove('map--faded');
 
 var COUNT_CARDS = 8;
 var TITLE = ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец', 'Маленький ужасный дворец', 'Красивый гостевой домик', 'Некрасивый негостеприимный домик', 'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'];
+var DESCRIPTION = 'Великолепная квартира-студия в центре Токио. Подходит как туристам, так и бизнесменам. Квартира полностью укомплектована и недавно отремонтирована.';
 var PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
 var TYPE = ['palace', 'flat', 'house', 'bungalo'];
 var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
@@ -60,7 +61,7 @@ var createObject = function () {
         checkin: CHECK_TIME[getRandom(0, CHECK_TIME.length)],
         checkout: CHECK_TIME[getRandom(0, CHECK_TIME.length)],
         features: featuresArr,
-        description: '',
+        description: DESCRIPTION,
         photos: PHOTOS.sort(compareRandom),
       },
       location: {
@@ -86,6 +87,19 @@ var createFragmentFeatures = function (array) {
     fragmentFeatures.appendChild(li);
   }
   return fragmentFeatures;
+};
+
+var createFragmentPhotos = function (array) {
+  var fragmentPhotos = document.createDocumentFragment(array);
+  for (var i = 0; i < array.length; i++) {
+    var img = document.createElement('img');
+    img.src = array[i];
+    img.width = 45;
+    img.height = 40;
+    img.classList.add('popup__photo');
+    fragmentPhotos.appendChild(img);
+  }
+  return fragmentPhotos;
 };
 
 var mapPinList = document.querySelector('.map__pins'); // куда вставить метки
@@ -147,13 +161,11 @@ var createItem = function (arr) {
     var cardFeatures = cardItem.querySelector('.popup__features');
     cardFeatures.innerHTML = '';
     cardFeatures.appendChild(createFragmentFeatures(arr[i].offer.features));
-
     cardItem.querySelector('.popup__description').textContent = arr[i].offer.description;
-
-    cardItem.querySelector('.popup__description').textContent = arr[i].offer.description;
-
-    // cardItem.querySelector('.popup__photos').= arr[i].offer.photos;
-
+    var cardPhotos = cardItem.querySelector('.popup__photos');
+    cardPhotos.innerHTML = '';
+    cardPhotos.appendChild(createFragmentPhotos(arr[i].offer.photos));
+    cardItem.querySelector('.popup__avatar').src = arr[i].author.avatar;
 
     fragmentCard.appendChild(cardItem);
     mapCard.appendChild(fragmentCard);
