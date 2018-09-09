@@ -60,7 +60,7 @@ var createObject = function () {
 
   var locationX = getRandom(MIN_LOCATION_X, MAX_LOCATION_X);
   var locationY = getRandom(MIN_LOCATION_Y, MAX_LOCATION_Y);
-  var obj = {
+  return {
     author: {
       avatar: 'img/avatars/user0' + getUnique(IMAGE_NUM_RANGES) + '.png'
     },
@@ -83,7 +83,6 @@ var createObject = function () {
       y: locationY
     }
   };
-  return obj;
 };
 
 // создаёт массив из 8 объектов
@@ -91,11 +90,8 @@ var createObject = function () {
 var createData = function () {
   var objects = [];
   for (var i = 0; i < CARDS_AMOUNT; i++) {
-
     objects.push(createObject());
-
   }
-
   return objects;
 };
 
@@ -129,7 +125,6 @@ var createPins = function (icons) {
     var fragmentPins = document.createDocumentFragment();
     var pinElem = pinTemplate.cloneNode(true);
     pinElem.children[0].src = icons[i].author.avatar;
-
     pinElem.style.left = icons[i].location.x + 'px';
     pinElem.style.top = icons[i].location.y + 'px';
     pinElem.children[0].alt = icons[i].offer.title;
@@ -143,16 +138,14 @@ var createCard = function (item) {
   var cardItem = cardTemplate.cloneNode(true);
   var roomNum = item.offer.rooms;
   var guestNum = item.offer.guests;
-  var roomPhrase = ' комнаты для ';
-  var guestPhrase = ' гостей';
-  guestPhrase = guestNum === 1 ? ' гостя' : ' гостей';
+  var roomPhrase = ' комнат для ';
+
+  var guestPhrase = guestNum === 1 ? ' гостя' : ' гостей';
 
   if (roomNum === 1) {
     roomPhrase = ' комната для ';
-  } else if (roomNum > 1 && roomNum < 5) {
-    roomPhrase = ' комнаты для ';
   } else {
-    roomPhrase = ' комнат для ';
+    roomPhrase = ' комнаты для ';
   }
 
   mapCard.insertBefore(cardItem, mapPinList);
@@ -181,7 +174,6 @@ var createItems = function (card) {
   var items = [];
   for (var i = 0; i < CARDS_AMOUNT; i++) {
     items.push(card);
-
   }
   return items;
 };
@@ -191,4 +183,3 @@ var cardsArray = createData(); // массив объектов
 createPins(cardsArray); // метки на карте
 var oneCard = createCard(cardsArray[0]); // 1 одну карточку
 createItems(oneCard); // выводит карточки
-
