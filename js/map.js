@@ -36,7 +36,7 @@ var cardTemplate = document.querySelector('#card') // шаблон карточ�
   .querySelector('.map__card');
 
 var getUnique = function (titles) {
-  var uniqueEl = titles[getRandom(0, (titles.length))];
+  var uniqueEl = titles[getRandom(0, titles.length)];
   titles.splice(titles.indexOf(uniqueEl), 1);
   return uniqueEl;
 };
@@ -91,8 +91,11 @@ var createObject = function () {
 var createData = function () {
   var objects = [];
   for (var i = 0; i < CARDS_AMOUNT; i++) {
+
     objects.push(createObject());
+
   }
+
   return objects;
 };
 
@@ -126,6 +129,7 @@ var createPins = function (icons) {
     var fragmentPins = document.createDocumentFragment();
     var pinElem = pinTemplate.cloneNode(true);
     pinElem.children[0].src = icons[i].author.avatar;
+
     pinElem.style.left = icons[i].location.x + 'px';
     pinElem.style.top = icons[i].location.y + 'px';
     pinElem.children[0].alt = icons[i].offer.title;
@@ -173,22 +177,18 @@ var createCard = function (item) {
   return cardItem;
 };
 
-var createItems = function () {
+var createItems = function (card) {
   var items = [];
   for (var i = 0; i < CARDS_AMOUNT; i++) {
-    items.push(oneCard);
+    items.push(card);
 
   }
-    console.log(items);
   return items;
-
 };
 
-
 var features = getRandomFeatures(FEATURES);
-var oneObject = createObject(); // 1 объект
 var cardsArray = createData(); // массив объектов
-var oneCard = createCard(oneObject); // 1 одну карточку
-createItems(oneCard); // выводит карточки
 createPins(cardsArray); // метки на карте
+var oneCard = createCard(cardsArray[0]); // 1 одну карточку
+createItems(oneCard); // выводит карточки
 
