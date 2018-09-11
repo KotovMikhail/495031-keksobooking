@@ -24,8 +24,8 @@ var TypeOfHouses = {
   'palace': 'Дворец'
 };
 
-var map = document.querySelector('.map');
-map.classList.remove('map--faded');
+// var map = document.querySelector('.map');
+// map.classList.remove('map--faded');
 var mapPinList = document.querySelector('.map__pins'); // куда вставить метки
 var pinTemplate = document.querySelector('#pin') // шаблон метки
   .content
@@ -178,8 +178,8 @@ var createItems = function (card) {
   return items;
 };
 
-var features = getRandomFeatures(FEATURES);
-var cardsArray = createData(); // массив объектов
-createPins(cardsArray); // метки на карте
-var oneCard = createCard(cardsArray[0]); // 1 одну карточку
-createItems(oneCard); // выводит карточки
+// var features = getRandomFeatures(FEATURES);
+// var cardsArray = createData(); // массив объектов
+// createPins(cardsArray); // метки на карте
+// var oneCard = createCard(cardsArray[0]); // 1 одну карточку
+// createItems(oneCard); // выводит карточки
