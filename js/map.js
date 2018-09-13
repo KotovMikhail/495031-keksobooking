@@ -16,6 +16,11 @@ var MAX_LOCATION_X = 900;
 var MIN_LOCATION_Y = 130;
 var MAX_LOCATION_Y = 630;
 var IMAGE_NUM_RANGES = [1, 2, 3, 4, 5, 6, 7, 8];
+var PIN_WIDTH = 65;
+var PIN_HEIGHT = 65;
+var PIN_OFFSET_X = 570;
+var PIN_OFFSET_Y = 375;
+var POINTER_HEIGHT = 22;
 
 var TypeOfHouses = {
   'flat': 'Квартира',
@@ -171,9 +176,6 @@ var createCard = function (item) {
   return cardItem;
 };
 
-
-
-
 var createItems = function (card) {
   var items = [];
   for (var i = 0; i < CARDS_AMOUNT; i++) {
@@ -202,12 +204,18 @@ var setDisabledAtr = function (bool, nodes) {
 window.addEventListener('load', function () {
   setDisabledAtr(true, fieldsets);
   setDisabledAtr(true, selects);
+  inputAddress.value = inputAddressLoad;
+
 });
 
 var mainPin = document.querySelector('.map__pin--main');
 var advertForm = document.querySelector('.ad-form');
+var inputAddress = document.querySelector('#address');
+var inputAddressLoad = Math.floor(PIN_OFFSET_X + (PIN_WIDTH / 2)) + ', ' + Math.floor(PIN_OFFSET_Y + (PIN_HEIGHT / 2));
+var inputAddressActive = Math.floor(PIN_OFFSET_X + (PIN_WIDTH / 2)) + ', ' + Math.floor((PIN_OFFSET_Y + PIN_HEIGHT + POINTER_HEIGHT));
 
 var onButtonMouseUp = function () {
+  inputAddress.value = inputAddressActive;
   map.classList.remove('map--faded');
   advertForm.classList.remove('ad-form--disabled');
   renderPage();
