@@ -24,8 +24,9 @@ var TypeOfHouses = {
   'palace': 'Дворец'
 };
 
-// var map = document.querySelector('.map');
-// map.classList.remove('map--faded');
+var map = document.querySelector('.map');
+var fieldsets = document.querySelectorAll('fieldset');
+var selects = document.querySelectorAll('select[name^=housing]');
 var mapPinList = document.querySelector('.map__pins'); // куда вставить метки
 var pinTemplate = document.querySelector('#pin') // шаблон метки
   .content
@@ -178,8 +179,43 @@ var createItems = function (card) {
   return items;
 };
 
-// var features = getRandomFeatures(FEATURES);
-// var cardsArray = createData(); // массив объектов
-// createPins(cardsArray); // метки на карте
-// var oneCard = createCard(cardsArray[0]); // 1 одну карточку
+var features = getRandomFeatures(FEATURES);
+// var oneCard = createCard();
 // createItems(oneCard); // выводит карточки
+var renderPage = function () {
+  var cardsArray = createData(); // массив объектов
+  createPins(cardsArray); // метки на карте
+};
+
+var setDisabledAtr = function (bool, nodes) {
+
+  if (bool) {
+    for (var i = 0; i < nodes.length; i++) {
+      nodes[i].setAttribute('disabled', 'disabled');
+    }
+  } else {
+    for (var i = 0; i < nodes.length; i++) {
+      nodes[i].removeAttribute('disabled');
+    }
+  }
+};
+
+window.addEventListener('load', function () {
+  setDisabledAtr(true, fieldsets);
+  setDisabledAtr(true, selects);
+});
+
+var mainPin = document.querySelector('.map__pin--main');
+var advertForm = document.querySelector('.ad-form');
+
+var onButtonMouseUp = function () {
+  map.classList.remove('map--faded');
+  advertForm.classList.remove('ad-form--disabled');
+  renderPage();
+  setDisabledAtr(false, fieldsets);
+  setDisabledAtr(false, selects);
+};
+
+
+mainPin.removeEventListener('click', onButtonMouseUp);
+mainPin.addEventListener('mouseup', onButtonMouseUp);
