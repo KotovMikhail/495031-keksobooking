@@ -171,6 +171,9 @@ var createCard = function (item) {
   return cardItem;
 };
 
+
+
+
 var createItems = function (card) {
   var items = [];
   for (var i = 0; i < CARDS_AMOUNT; i++) {
@@ -179,24 +182,20 @@ var createItems = function (card) {
   return items;
 };
 
+var cardsArray = createData();
 var features = getRandomFeatures(FEATURES);
 // var oneCard = createCard();
 // createItems(oneCard); // выводит карточки
 var renderPage = function () {
-  var cardsArray = createData(); // массив объектов
-  createPins(cardsArray); // метки на карте
+  createPins(cardsArray);
 };
 
 var setDisabledAtr = function (bool, nodes) {
-
-  if (bool) {
-    for (var i = 0; i < nodes.length; i++) {
+  for (var i = 0; i < nodes.length; i++) {
+    if (bool) {
       nodes[i].setAttribute('disabled', 'disabled');
     }
-  } else {
-    for (var i = 0; i < nodes.length; i++) {
-      nodes[i].removeAttribute('disabled');
-    }
+    nodes[i].removeAttribute('disabled');
   }
 };
 
@@ -216,6 +215,4 @@ var onButtonMouseUp = function () {
   setDisabledAtr(false, selects);
 };
 
-
-mainPin.removeEventListener('click', onButtonMouseUp);
-mainPin.addEventListener('mouseup', onButtonMouseUp);
+mainPin.addEventListener('mousedown', onButtonMouseUp);
