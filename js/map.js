@@ -59,7 +59,7 @@ var getRandomFeatures = function (array) {
   array.length = getRandom(1, array.length);
   return array;
 };
-
+var features = getRandomFeatures(FEATURES);
 // создаёт объект
 
 var createObject = function () {
@@ -184,30 +184,25 @@ var createItems = function (card) {
   return items;
 };
 
-
-var features = getRandomFeatures(FEATURES);
+var cardsArray = createData();
 
 var renderPage = function () {
-  var cardsArray = createData();
   createPins(cardsArray);
-  var oneCard = createCard(cardsArray[0]);
-
-  createItems(oneCard);
 };
 
-var setDisabledAtr = function (bool, nodes) {
+var toggleDisabled = function (isDisabled, nodes) {
   for (var i = 0; i < nodes.length; i++) {
-    if (bool) {
-      nodes[i].setAttribute('disabled', 'disabled');
+    if (isDisabled) {
+      nodes[i].disabled = isDisabled;
     } else {
-      nodes[i].removeAttribute('disabled');
+      nodes[i].disabled = isDisabled;
     }
   }
 };
 
 window.addEventListener('load', function () {
-  setDisabledAtr(true, fieldsets);
-  setDisabledAtr(true, selects);
+  toggleDisabled(true, fieldsets);
+  toggleDisabled(true, selects);
   inputAddress.value = inputAddressLoad;
 });
 
@@ -223,8 +218,24 @@ var onButtonMouseUp = function () {
   map.classList.remove('map--faded');
   advertForm.classList.remove('ad-form--disabled');
   renderPage();
-  setDisabledAtr(false, fieldsets);
-  setDisabledAtr(false, selects);
+  toggleDisabled(false, fieldsets);
+  toggleDisabled(false, selects);
 };
 
-mainPin.addEventListener('mousedown', onButtonMouseUp);
+mapPinList.addEventListener('click', function (evt) {
+  var target = evt.target;
+  while (target !== mapPinList) {
+    if (target.tagName === 'BUTTON') {
+
+      for (var i = 0; i < 1; i++) {
+        var oneCard = createCard(cardsArray[getRandom(0, 7)]);
+        createItems(oneCard);
+      }
+
+      return;
+    }
+    target = target.parentNode;
+  }
+});
+
+mainPin.addEventListener('mouseup', onButtonMouseUp);
