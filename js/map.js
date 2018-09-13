@@ -184,20 +184,24 @@ var createItems = function (card) {
   return items;
 };
 
-var cardsArray = createData();
+
 var features = getRandomFeatures(FEATURES);
-// var oneCard = createCard();
-// createItems(oneCard); // выводит карточки
+
 var renderPage = function () {
+  var cardsArray = createData();
   createPins(cardsArray);
+  var oneCard = createCard(cardsArray[0]);
+
+  createItems(oneCard);
 };
 
 var setDisabledAtr = function (bool, nodes) {
   for (var i = 0; i < nodes.length; i++) {
     if (bool) {
       nodes[i].setAttribute('disabled', 'disabled');
+    } else {
+      nodes[i].removeAttribute('disabled');
     }
-    nodes[i].removeAttribute('disabled');
   }
 };
 
@@ -205,7 +209,6 @@ window.addEventListener('load', function () {
   setDisabledAtr(true, fieldsets);
   setDisabledAtr(true, selects);
   inputAddress.value = inputAddressLoad;
-
 });
 
 var mainPin = document.querySelector('.map__pin--main');
@@ -215,6 +218,7 @@ var inputAddressLoad = Math.floor(PIN_OFFSET_X + (PIN_WIDTH / 2)) + ', ' + Math.
 var inputAddressActive = Math.floor(PIN_OFFSET_X + (PIN_WIDTH / 2)) + ', ' + Math.floor((PIN_OFFSET_Y + PIN_HEIGHT + POINTER_HEIGHT));
 
 var onButtonMouseUp = function () {
+  inputAddress.setAttribute('disabled', 'disabled');
   inputAddress.value = inputAddressActive;
   map.classList.remove('map--faded');
   advertForm.classList.remove('ad-form--disabled');
