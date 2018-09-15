@@ -185,8 +185,6 @@ var createItems = function (card) {
   return items;
 };
 
-
-
 var cardsArray = createData();
 
 var toggleDisabled = function (isDisabled, nodes) {
@@ -224,24 +222,22 @@ var onButtonMouseUp = function () {
 
 mapPinList.addEventListener('click', function (evt) {
 
+  var oneCard = createCard(cardsArray[0]);
   var target = evt.target;
-
   while (target !== mapPinList) {
-    if (target.tagName === 'BUTTON') {
-      for (var i = 0; i < 1; i++) {
-        var oneCard = createCard(cardsArray[getRandom(0, cardsArray.length - 1)]);
-        createItems(oneCard);
-      }
-      return;
+
+    if (target.className === 'map__pin' && target.className !== 'map__pin--main') {
+      createItems(oneCard);
+      break;
     }
     target = target.parentNode;
   }
 });
 
 
-var removeonButtonMouseUp = function () {
+var removeOnButtonMouseUp = function () {
   mainPin.removeEventListener('mouseup', onButtonMouseUp);
 };
 
 mainPin.addEventListener('mouseup', onButtonMouseUp);
-mainPin.addEventListener('mouseup', removeonButtonMouseUp);
+mainPin.addEventListener('mouseup', removeOnButtonMouseUp);
