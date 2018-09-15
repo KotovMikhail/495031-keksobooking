@@ -177,25 +177,22 @@ var createCard = function (item) {
   return cardItem;
 };
 
-var createItems = function () {
-  var items = [];
-  for (var i = 0; i < CARDS_AMOUNT; i++) {
-    var oneBigCard = createCard(cardsArray[i]);
-    oneBigCard.dataset.id = i;
-    items.push(oneBigCard);
-  }
-  return items;
-};
+// var createItems = function () {
+//   var items = [];
+//   for (var i = 0; i < CARDS_AMOUNT; i++) {
+//     var oneBigCard = createCard(cardsArray[i]);
+//     oneBigCard.dataset.id = i;
+//     items.push(oneBigCard);
+//   }
+//   return items;
+// };
 
 var cardsArray = createData();
+console.log(cardsArray);
 
 var toggleDisabled = function (isDisabled, nodes) {
   for (var i = 0; i < nodes.length; i++) {
-    if (isDisabled) {
-      nodes[i].disabled = true;
-    } else {
-      nodes[i].disabled = false;
-    }
+    nodes[i].disabled = isDisabled;
   }
 };
 
@@ -220,7 +217,6 @@ var onButtonMouseUp = function () {
   toggleDisabled(false, fieldsets);
   toggleDisabled(false, selects);
 };
-
 
 mapPinList.addEventListener('click', function (evt) {
   var target = evt.target;
