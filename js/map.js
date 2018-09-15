@@ -222,15 +222,13 @@ var onButtonMouseUp = function () {
 
 mapPinList.addEventListener('click', function (evt) {
 
-  var oneCard = createCard(cardsArray[0]);
-  var target = evt.target;
-  while (target !== mapPinList) {
 
-    if (target.className === 'map__pin' && target.className !== 'map__pin--main') {
-      createItems(oneCard);
-      break;
-    }
-    target = target.parentNode;
+  var target = evt.target;
+  var pinButton = target.closest('.map__pin:not(.map__pin--main)');
+  console.log(pinButton);
+  if (pinButton) {
+    createCard(cardsArray[0]);
+
   }
 });
 
