@@ -139,7 +139,6 @@ var createPins = function (icons) {
     fragmentPins.appendChild(pinElem);
     mapPinList.appendChild(fragmentPins);
   }
-
 };
 
 var createCard = function (item) {
@@ -189,15 +188,13 @@ var createItems = function () {
 };
 
 var cardsArray = createData();
-var itemsArray = createItems();
-console.log(itemsArray);
 
 var toggleDisabled = function (isDisabled, nodes) {
   for (var i = 0; i < nodes.length; i++) {
     if (isDisabled) {
-      nodes[i].disabled = isDisabled;
+      nodes[i].disabled = true;
     } else {
-      nodes[i].disabled = isDisabled;
+      nodes[i].disabled = false;
     }
   }
 };
@@ -230,7 +227,7 @@ mapPinList.addEventListener('click', function (evt) {
   var pinButton = target.closest('.map__pin:not(.map__pin--main)');
 
   if (pinButton) {
-    map.appendChild(itemsArray[pinButton.dataset.id]);
+    map.appendChild(createCard(cardsArray[pinButton.dataset.id]));
   }
 });
 
