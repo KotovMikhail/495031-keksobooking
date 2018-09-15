@@ -132,6 +132,7 @@ var createPins = function (icons) {
     var fragmentPins = document.createDocumentFragment();
     var pinElem = pinTemplate.cloneNode(true);
     pinElem.children[0].src = icons[i].author.avatar;
+    pinElem.dataset.id = i;
     pinElem.style.left = icons[i].location.x + 'px';
     pinElem.style.top = icons[i].location.y + 'px';
     pinElem.children[0].alt = icons[i].offer.title;
@@ -177,15 +178,19 @@ var createCard = function (item) {
   return cardItem;
 };
 
-var createItems = function (card) {
+var createItems = function () {
   var items = [];
   for (var i = 0; i < CARDS_AMOUNT; i++) {
-    items.push(card);
+    var oneBigCard = createCard(cardsArray[i]);
+    oneBigCard.dataset.id = i;
+    items.push(oneBigCard);
   }
   return items;
 };
 
 var cardsArray = createData();
+var itemsArray = createItems();
+console.log(itemsArray);
 
 var toggleDisabled = function (isDisabled, nodes) {
   for (var i = 0; i < nodes.length; i++) {
@@ -221,14 +226,11 @@ var onButtonMouseUp = function () {
 
 
 mapPinList.addEventListener('click', function (evt) {
-
-
   var target = evt.target;
   var pinButton = target.closest('.map__pin:not(.map__pin--main)');
-  console.log(pinButton);
-  if (pinButton) {
-    createCard(cardsArray[0]);
 
+  if (pinButton) {
+    map.appendChild(itemsArray[pinButton.dataset.id]);
   }
 });
 
