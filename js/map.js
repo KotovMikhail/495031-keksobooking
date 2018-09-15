@@ -59,8 +59,9 @@ var getRandomFeatures = function (array) {
   array.length = getRandom(1, array.length);
   return array;
 };
+
 var features = getRandomFeatures(FEATURES);
-// создаёт объект
+
 
 var createObject = function () {
 
@@ -184,11 +185,9 @@ var createItems = function (card) {
   return items;
 };
 
-var cardsArray = createData();
 
-var renderPage = function () {
-  createPins(cardsArray);
-};
+
+var cardsArray = createData();
 
 var toggleDisabled = function (isDisabled, nodes) {
   for (var i = 0; i < nodes.length; i++) {
@@ -217,25 +216,32 @@ var onButtonMouseUp = function () {
   inputAddress.value = inputAddressActive;
   map.classList.remove('map--faded');
   advertForm.classList.remove('ad-form--disabled');
-  renderPage();
+  createPins(cardsArray);
   toggleDisabled(false, fieldsets);
   toggleDisabled(false, selects);
 };
 
+
 mapPinList.addEventListener('click', function (evt) {
+
   var target = evt.target;
+
   while (target !== mapPinList) {
     if (target.tagName === 'BUTTON') {
-
       for (var i = 0; i < 1; i++) {
-        var oneCard = createCard(cardsArray[getRandom(0, 7)]);
+        var oneCard = createCard(cardsArray[getRandom(0, cardsArray.length - 1)]);
         createItems(oneCard);
       }
-
       return;
     }
     target = target.parentNode;
   }
 });
 
+
+var removeonButtonMouseUp = function () {
+  mainPin.removeEventListener('mouseup', onButtonMouseUp);
+};
+
 mainPin.addEventListener('mouseup', onButtonMouseUp);
+mainPin.addEventListener('mouseup', removeonButtonMouseUp);
