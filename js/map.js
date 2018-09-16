@@ -48,10 +48,10 @@ var getUnique = function (titles) {
 };
 
 var getRandom = function (min, max) {
-  return Math.floor(Math.random() * max + min);
+  return Math.floor(Math.random() * (max - min)) + min;
 };
 
-function shuffleArray(array) {
+var shuffleArray = function (array) {
   var finalArr = array.slice();
   for (var i = 0; i < finalArr.length; i++) {
     var j = Math.floor(Math.random() * (i + 1));
@@ -60,7 +60,7 @@ function shuffleArray(array) {
     finalArr[j] = tmp;
   }
   return finalArr;
-}
+};
 
 var createObject = function () {
   var locationX = getRandom(MIN_LOCATION_X, MAX_LOCATION_X);
@@ -90,15 +90,12 @@ var createObject = function () {
   };
 };
 
-// создаёт массив из 8 объектов
-
 var createData = function () {
   var objects = [];
   for (var i = 0; i < CARDS_AMOUNT; i++) {
 
     objects.push(createObject());
   }
-
   return objects;
 };
 
@@ -171,10 +168,8 @@ var createCard = function (item) {
   cardPhotos.innerHTML = '';
   cardPhotos.appendChild(createFragmentPhotos(item.offer.photos));
   cardItem.querySelector('.popup__avatar').src = item.author.avatar;
-
   fragmentCard.appendChild(cardItem);
   mapCard.appendChild(fragmentCard);
-
   return cardItem;
 };
 
@@ -198,6 +193,11 @@ var inputAddress = document.querySelector('#address');
 var inputAddressLoad = Math.floor(PIN_OFFSET_X + (PIN_WIDTH / 2)) + ', ' + Math.floor(PIN_OFFSET_Y + (PIN_HEIGHT / 2));
 var inputAddressActive = Math.floor(PIN_OFFSET_X + (PIN_WIDTH / 2)) + ', ' + Math.floor((PIN_OFFSET_Y + PIN_HEIGHT + POINTER_HEIGHT));
 
+
+var closePopup = function () {
+  map.removeChild(document.querySelector('.popup'));
+};
+
 var onButtonMouseUp = function () {
   inputAddress.setAttribute('disabled', 'disabled');
   inputAddress.value = inputAddressActive;
@@ -208,13 +208,22 @@ var onButtonMouseUp = function () {
   toggleDisabled(false, selects);
 };
 
+var deletePopup = function () {
+  var popupClose = document.querySelector('.popup__close');
+  popupClose.addEventListener('click', function () {
+    closePopup();
+  });
+};
+
 mapPinList.addEventListener('click', function (evt) {
   var target = evt.target;
   var pinButton = target.closest('.map__pin:not(.map__pin--main)');
 
   if (pinButton) {
     map.appendChild(createCard(cardsArray[pinButton.dataset.id]));
+    deletePopup();
   }
+
 });
 
 var removeOnButtonMouseUp = function () {
