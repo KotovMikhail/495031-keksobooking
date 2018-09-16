@@ -79,7 +79,7 @@ var createObject = function () {
       guests: getRandom(1, 5),
       checkin: CHECK_TIMES[getRandom(0, CHECK_TIMES.length)],
       checkout: CHECK_TIMES[getRandom(0, CHECK_TIMES.length)],
-      features: FEATURES.slice(0, getRandom(0, FEATURES.length)),
+      features: shuffleArray(FEATURES.slice(0, getRandom(0, FEATURES.length))),
       description: DESCRIPTIONS,
       photos: shuffleArray(PHOTOS),
     },
@@ -219,12 +219,17 @@ mapPinList.addEventListener('click', function (evt) {
   var target = evt.target;
   var pinButton = target.closest('.map__pin:not(.map__pin--main)');
 
-  if (pinButton) {
-    map.appendChild(createCard(cardsArray[pinButton.dataset.id]));
-    deletePopup();
-  }
 
+
+  if (pinButton && map.lastChild !== 'ARTICLE') {
+    var ARTICLE = createCard(cardsArray[pinButton.dataset.id]);
+    map.appendChild(ARTICLE);
+  } else {
+    map.removeChild(map.lastChild);
+  }
 });
+
+
 
 var removeOnButtonMouseUp = function () {
   mainPin.removeEventListener('mouseup', onButtonMouseUp);
