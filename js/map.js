@@ -51,20 +51,18 @@ var getRandom = function (min, max) {
   return Math.floor(Math.random() * max + min);
 };
 
-var compareRandom = function () {
-  return Math.random() - 0.5;
-};
-
-var getRandomFeatures = function (array) {
-  array.length = getRandom(1, array.length);
-  return array;
-};
-
-var features = getRandomFeatures(FEATURES);
-
+function shuffleArray(array) {
+  var finalArr = array.slice();
+  for (var i = 0; i < finalArr.length; i++) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = finalArr[i];
+    finalArr[i] = finalArr[j];
+    finalArr[j] = tmp;
+  }
+  return finalArr;
+}
 
 var createObject = function () {
-
   var locationX = getRandom(MIN_LOCATION_X, MAX_LOCATION_X);
   var locationY = getRandom(MIN_LOCATION_Y, MAX_LOCATION_Y);
   return {
@@ -81,9 +79,9 @@ var createObject = function () {
       guests: getRandom(1, 5),
       checkin: CHECK_TIMES[getRandom(0, CHECK_TIMES.length)],
       checkout: CHECK_TIMES[getRandom(0, CHECK_TIMES.length)],
-      features: features,
+      features: FEATURES.slice(0, getRandom(0, FEATURES.length)),
       description: DESCRIPTIONS,
-      photos: PHOTOS.sort(compareRandom),
+      photos: shuffleArray(PHOTOS),
     },
     location: {
       x: locationX,
@@ -97,8 +95,10 @@ var createObject = function () {
 var createData = function () {
   var objects = [];
   for (var i = 0; i < CARDS_AMOUNT; i++) {
+
     objects.push(createObject());
   }
+
   return objects;
 };
 
@@ -174,21 +174,11 @@ var createCard = function (item) {
 
   fragmentCard.appendChild(cardItem);
   mapCard.appendChild(fragmentCard);
+
   return cardItem;
 };
 
-// var createItems = function () {
-//   var items = [];
-//   for (var i = 0; i < CARDS_AMOUNT; i++) {
-//     var oneBigCard = createCard(cardsArray[i]);
-//     oneBigCard.dataset.id = i;
-//     items.push(oneBigCard);
-//   }
-//   return items;
-// };
-
 var cardsArray = createData();
-console.log(cardsArray);
 
 var toggleDisabled = function (isDisabled, nodes) {
   for (var i = 0; i < nodes.length; i++) {
@@ -226,7 +216,6 @@ mapPinList.addEventListener('click', function (evt) {
     map.appendChild(createCard(cardsArray[pinButton.dataset.id]));
   }
 });
-
 
 var removeOnButtonMouseUp = function () {
   mainPin.removeEventListener('mouseup', onButtonMouseUp);
