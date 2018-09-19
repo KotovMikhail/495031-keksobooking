@@ -45,7 +45,9 @@ var cardTemplate = document.querySelector('#card')
   .content
   .querySelector('.map__card');
 
-
+var activeCardId;
+var currentPin = null;
+var currentCard = null;
 
 var getUnique = function (titles) {
   var uniqueEl = titles[getRandom(0, titles.length)];
@@ -99,7 +101,6 @@ var createObject = function () {
 var createData = function () {
   var objects = [];
   for (var i = 0; i < CARDS_AMOUNT; i++) {
-
     objects.push(createObject());
   }
   return objects;
@@ -207,61 +208,54 @@ var onButtonMouseUp = function () {
 };
 
 var makePopup = function (id) {
-  mapSection.appendChild(createCard(cardsArray[id]));
+  activeCardId = id;
+  currentCard = mapSection.appendChild(createCard(cardsArray[id]));
   document.addEventListener('keydown', onPopupEscPress);
 };
 
+var removeCard = function () {
+  if (currentCard) {
+    mapSection.removeChild(currentCard);
+    currentCard = null;
+  }
+};
+
 var onPopupEscPress = function (evt) {
-  var bigCard = document.querySelector('.map__card');
-  if (bigCard && evt.keyCode === ESC_KEYCODE) {
-    mapSection.removeChild(bigCard);
+  if (evt.keyCode === ESC_KEYCODE) {
+    removeCard();
     document.removeEventListener('keydown', onPopupEscPress);
   }
 };
 
-
-var stopCard = function (pin, click) {
-  if (pin && (pin.dataset.id === click)) {
-    return;
+var hideLastPin = function () {
+  removeCard();
+  if (currentPin) {
+    currentPin.classList.remove(MAP_PIN_ACTIVE_CLASS);
+    activeCardId = null;
   }
 };
 
 var showCard = function (evt) {
   var target = evt.target;
   var pinButton = target.closest('.map__pin:not(.map__pin--main)');
-  var activePin = mapPinList.querySelector('.map__pin--active');
-  var popupCard = mapSection.querySelector('.popup');
+  var hasButtonClose = target.className === 'popup__close';
 
-  if (popupCard && pinButton) {
-    mapSection.removeChild(popupCard);
+  if (hasButtonClose) {
+    hideLastPin();
   }
 
-  if (pinButton) {
-    var pinClick = pinButton.getAttribute('data-id');
-    makePopup(pinButton.dataset.id);
+  // если нажат не маркер или активный маркер, то выйти
+  if (!pinButton || (pinButton && activeCardId === pinButton.dataset.id)) {
+    return;
   }
 
-  if (pinButton) {
-    stopCard(pinButton, pinClick);
-  }
+  hideLastPin();
 
+  currentPin = pinButton;
 
-  if (activePin) {
-    activePin.classList.remove(MAP_PIN_ACTIVE_CLASS);
-  }
+  makePopup(pinButton.dataset.id);
 
-
-
-  if (pinButton) {
-    pinButton.classList.add(MAP_PIN_ACTIVE_CLASS);
-  }
-
-  if (target.className === 'popup__close') {
-    mapSection.removeChild(popupCard);
-    activePin.classList.remove(MAP_PIN_ACTIVE_CLASS);
-  }
-
-
+  pinButton.classList.add(MAP_PIN_ACTIVE_CLASS);
 };
 
 mapSection.addEventListener('click', function (evt) {
@@ -270,7 +264,6 @@ mapSection.addEventListener('click', function (evt) {
 
 var removeOnButtonMouseUp = function () {
   mainPin.removeEventListener('mouseup', onButtonMouseUp);
-
 };
 
 mainPin.addEventListener('mouseup', onButtonMouseUp);
