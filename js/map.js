@@ -24,7 +24,7 @@ var PIN_OFFSET_X = 570;
 var PIN_OFFSET_Y = 375;
 var POINTER_HEIGHT = 22;
 
-var MAP_PIN_ACTIVE = 'map__pin--active';
+var MAP_PIN_ACTIVE_CLASS = 'map__pin--active';
 var ESC_KEYCODE = 27;
 
 var TypeOfHouses = {
@@ -45,9 +45,7 @@ var cardTemplate = document.querySelector('#card')
   .content
   .querySelector('.map__card');
 
-var fragmentCard = document.createDocumentFragment();
-var cardItem = cardTemplate.cloneNode(true);
-var roomPhrase = ' комнат для ';
+
 
 var getUnique = function (titles) {
   var uniqueEl = titles[getRandom(0, titles.length)];
@@ -147,6 +145,8 @@ var createPins = function (icons) {
 };
 
 var createCard = function (item) {
+  var cardItem = cardTemplate.cloneNode(true);
+  var roomPhrase = ' комнат для ';
   var roomNum = item.offer.rooms;
   var guestNum = item.offer.guests;
   var guestPhrase = guestNum === 1 ? ' гостя' : ' гостей';
@@ -172,8 +172,7 @@ var createCard = function (item) {
   cardPhotos.innerHTML = '';
   cardPhotos.appendChild(createFragmentPhotos(item.offer.photos));
   cardItem.querySelector('.popup__avatar').src = item.author.avatar;
-  fragmentCard.appendChild(cardItem);
-  mapSection.appendChild(fragmentCard);
+  mapSection.appendChild(cardItem);
   return cardItem;
 };
 
@@ -212,11 +211,18 @@ var makePopup = function (id) {
   document.addEventListener('keydown', onPopupEscPress);
 };
 
-var onPopupEscPress = function (evt, activeClass) {
+var onPopupEscPress = function (evt) {
   var bigCard = document.querySelector('.map__card');
   if (bigCard && evt.keyCode === ESC_KEYCODE) {
     mapSection.removeChild(bigCard);
     document.removeEventListener('keydown', onPopupEscPress);
+  }
+};
+
+
+var stopCard = function (pin, click) {
+  if (pin && (pin.dataset.id === click)) {
+    return;
   }
 };
 
@@ -231,21 +237,30 @@ var showCard = function (evt) {
   }
 
   if (pinButton) {
+    var pinClick = pinButton.getAttribute('data-id');
     makePopup(pinButton.dataset.id);
   }
 
-  if (activePin) {
-    activePin.classList.remove(MAP_PIN_ACTIVE);
+  if (pinButton) {
+    stopCard(pinButton, pinClick);
   }
 
+
+  if (activePin) {
+    activePin.classList.remove(MAP_PIN_ACTIVE_CLASS);
+  }
+
+
+
   if (pinButton) {
-    pinButton.classList.add(MAP_PIN_ACTIVE);
+    pinButton.classList.add(MAP_PIN_ACTIVE_CLASS);
   }
 
   if (target.className === 'popup__close') {
     mapSection.removeChild(popupCard);
-    activePin.classList.remove(MAP_PIN_ACTIVE);
+    activePin.classList.remove(MAP_PIN_ACTIVE_CLASS);
   }
+
 
 };
 
