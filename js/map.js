@@ -45,6 +45,12 @@ var cardTemplate = document.querySelector('#card')
   .content
   .querySelector('.map__card');
 
+var mainPin = document.querySelector('.map__pin--main');
+var advertForm = document.querySelector('.ad-form');
+var inputAddress = document.querySelector('#address');
+var inputAddressLoad = Math.floor(PIN_OFFSET_X + (PIN_WIDTH / 2)) + ', ' + Math.floor(PIN_OFFSET_Y + (PIN_HEIGHT / 2));
+var inputAddressActive = Math.floor(PIN_OFFSET_X + (PIN_WIDTH / 2)) + ', ' + Math.floor((PIN_OFFSET_Y + PIN_HEIGHT + POINTER_HEIGHT));
+
 var activeCardId;
 var currentPin = null;
 var currentCard = null;
@@ -145,7 +151,7 @@ var createPins = function (icons) {
   }
 };
 
-var createCard = function (item) {
+var getCardData = function (item) {
   var cardItem = cardTemplate.cloneNode(true);
   var roomPhrase = ' комнат для ';
   var roomNum = item.offer.rooms;
@@ -191,25 +197,20 @@ window.addEventListener('load', function () {
   inputAddress.value = inputAddressLoad;
 });
 
-var mainPin = document.querySelector('.map__pin--main');
-var advertForm = document.querySelector('.ad-form');
-var inputAddress = document.querySelector('#address');
-var inputAddressLoad = Math.floor(PIN_OFFSET_X + (PIN_WIDTH / 2)) + ', ' + Math.floor(PIN_OFFSET_Y + (PIN_HEIGHT / 2));
-var inputAddressActive = Math.floor(PIN_OFFSET_X + (PIN_WIDTH / 2)) + ', ' + Math.floor((PIN_OFFSET_Y + PIN_HEIGHT + POINTER_HEIGHT));
-
 var onButtonMouseUp = function () {
-  inputAddress.setAttribute('disabled', 'disabled');
+  inputAddress.disabled = true;
   inputAddress.value = inputAddressActive;
   mapSection.classList.remove('map--faded');
   advertForm.classList.remove('ad-form--disabled');
   createPins(cardsArray);
   toggleDisabled(false, fieldsets);
   toggleDisabled(false, selects);
+  mainPin.addEventListener('mouseup', removeOnButtonMouseUp);
 };
 
-var makePopup = function (id) {
+var createCard = function (id) {
   activeCardId = id;
-  currentCard = mapSection.appendChild(createCard(cardsArray[id]));
+  currentCard = mapSection.appendChild(getCardData(cardsArray[id]));
   document.addEventListener('keydown', onPopupEscPress);
 };
 
@@ -230,7 +231,7 @@ var onPopupEscPress = function (evt) {
   }
 };
 
-var hideLastPin = function () {
+var checkActive = function () {
   removeCard();
   if (currentPin) {
     currentPin.classList.remove(MAP_PIN_ACTIVE_CLASS);
@@ -241,10 +242,10 @@ var hideLastPin = function () {
 var showCard = function (evt) {
   var target = evt.target;
   var pinButton = target.closest('.map__pin:not(.map__pin--main)');
-  var hasButtonClose = target.className === 'popup__close';
+  var buttonClose = target.className === 'popup__close';
 
-  if (hasButtonClose) {
-    hideLastPin();
+  if (buttonClose) {
+    checkActive();
   }
 
   // если нажат не маркер или активный маркер, то выйти
@@ -252,11 +253,11 @@ var showCard = function (evt) {
     return;
   }
 
-  hideLastPin();
+  checkActive();
 
   currentPin = pinButton;
 
-  makePopup(pinButton.dataset.id);
+  createCard(pinButton.dataset.id);
 
   pinButton.classList.add(MAP_PIN_ACTIVE_CLASS);
 };
@@ -270,4 +271,3 @@ var removeOnButtonMouseUp = function () {
 };
 
 mainPin.addEventListener('mouseup', onButtonMouseUp);
-mainPin.addEventListener('mouseup', removeOnButtonMouseUp);
