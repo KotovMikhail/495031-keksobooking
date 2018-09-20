@@ -224,6 +224,9 @@ var onPopupEscPress = function (evt) {
   if (evt.keyCode === ESC_KEYCODE) {
     removeCard();
     document.removeEventListener('keydown', onPopupEscPress);
+    currentPin.classList.remove(MAP_PIN_ACTIVE_CLASS);
+    activeCardId = null;
+    currentPin.blur();
   }
 };
 
