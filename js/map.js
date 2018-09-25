@@ -1,4 +1,4 @@
-use strict ';
+'use strict';
 
 var CARDS_AMOUNT = 8;
 var TITLES = ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец', 'Маленький ужасный дворец', 'Красивый гостевой домик', 'Некрасивый негостеприимный домик', 'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'];
@@ -353,21 +353,19 @@ houseType.addEventListener('change', function () {
   housePrice.setAttribute('placeholder', select.placeholder);
 });
 
-var options = capacity.querySelectorAll("option");
-var selectType = rooms[roomNumber.value];
-roomNumber.addEventListener("change", function () {
+var options = capacity.querySelectorAll('option');
 
+roomNumber.addEventListener('change', function () {
+  var selectType = rooms[roomNumber.value];
   setOptions(selectType);
   setValidity(selectType);
-  console.log(selectType);
-  console.log(roomNumber.value);
+
 });
 
-var setOptions = function (selectType) {
+var setOptions = function (selectValue) {
 
   var checkValidity = function (value) {
-    console.log(selectType.enabled.indexOf(value) === -1);
-    return selectType.enabled.indexOf(value) === -1;
+    return selectValue.enabled.indexOf(value) === -1;
   };
 
   options.forEach(function (option) {
@@ -375,14 +373,11 @@ var setOptions = function (selectType) {
   });
 };
 
-var setValidity = function (selectType) {
-
-  var isValid = selectType.enabled.indexOf(capacity.value) !== -1;
-  console.log(selectType.enabled.indexOf(capacity.value));
-  var customValidity = isValid ? "" : selectType.textError;
+var setValidity = function (selectValue) {
+  var isValid = selectValue.enabled.indexOf(capacity.value) !== -1;
+  var customValidity = isValid ? '' : selectValue.textError;
   capacity.setCustomValidity(customValidity);
 };
-
 
 capacity.addEventListener('change', function () {
   capacity.setCustomValidity('');
@@ -404,8 +399,20 @@ title.addEventListener('input', function (evt) {
   checkTitleLength(evt);
 });
 
+var onSubmitClick = function () {
+  checkBeforeSend(allInputsElements);
+};
 
-form.addEventListener('submit', function (event) {
+var allInputsElements = mapForm.querySelectorAll('input');
 
-  event.preventDefault();
-});
+formSubmitElement.addEventListener('click', onSubmitClick);
+
+var checkBeforeSend = function (formElements) {
+  for (var i = 0; i < formElements.length; i++) {
+    if (formElements[i].validity.valid === false) {
+      formElements[i].setAttribute('style', 'border: 2px solid red;');
+    } else {
+      formElements[i].removeAttribute('style');
+    }
+  }
+};
