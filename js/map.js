@@ -38,7 +38,6 @@ var TYPES_OF_HOUSES = {
     placeholder: '1000',
     translate: 'Квартира'
   },
-
   'house': {
     min: 5000,
     placeholder: '5000',
@@ -99,6 +98,10 @@ var roomNumber = mapForm.querySelector('#room_number');
 var capacity = mapForm.querySelector('#capacity');
 var houseType = mapForm.querySelector('#type');
 var housePrice = mapForm.querySelector('#price');
+var formSubmitElement = mapForm.querySelector('.ad-form__submit');
+
+
+console.log(TYPES_OF_HOUSES['bungalo'].translate);
 
 var getUnique = function (titles) {
   var uniqueEl = titles[getRandom(0, titles.length)];
@@ -213,7 +216,7 @@ var getCardData = function (item) {
   cardItem.querySelector('.popup__title').textContent = item.offer.title;
   cardItem.querySelector('.popup__text--address').textContent = item.offer.address;
   cardItem.querySelector('.popup__text--price').innerHTML = item.offer.price + '&#x20bd/ночь';
-  cardItem.querySelector('.popup__type').textContent = TYPES_OF_HOUSES[item.offer.type];
+  cardItem.querySelector('.popup__type').textContent = TYPES_OF_HOUSES[item.offer.type].translate;
   cardItem.querySelector('.popup__text--capacity').textContent = roomNum + roomPhrase + ' для ' + guestNum + guestPhrase;
   cardItem.querySelector('.popup__text--time').textContent = 'Заезд после ' + item.offer.checkin + ' выезд после ' + item.offer.checkout;
   var cardFeatures = cardItem.querySelector('.popup__features');
@@ -244,14 +247,14 @@ window.addEventListener('load', function () {
 });
 
 var onButtonMouseUp = function () {
-  inputAddress.disabled = true;
+  inputAddress.readOnly = true;
   inputAddress.value = inputAddressActive;
   mapSection.classList.remove('map--faded');
   advertForm.classList.remove('ad-form--disabled');
   createPins(cardsArray);
   toggleDisabled(false, fieldsets);
   toggleDisabled(false, selects);
-  mainPin.addEventListener('mouseup', removeOnButtonMouseUp);
+  removeOnButtonMouseUp();
 };
 
 var createCard = function (id) {
@@ -310,17 +313,17 @@ var showCard = function (evt) {
   pinButton.classList.add(MAP_PIN_ACTIVE_CLASS);
 };
 
-mapSection.addEventListener('click', function (evt) {
-  showCard(evt);
-});
-
 var removeOnButtonMouseUp = function () {
   mainPin.removeEventListener('mouseup', onButtonMouseUp);
 };
 
+mapSection.addEventListener('click', function (evt) {
+  showCard(evt);
+});
+
 mainPin.addEventListener('mouseup', onButtonMouseUp);
 
-// 4 задание - - - - - - - - - - - - - - -- -
+// 4.2 задание - - - - - - - - - - - - - - -- -
 
 var checkTitleValidity = function () {
   var validity = title.validity;
@@ -352,7 +355,6 @@ houseType.addEventListener('change', function () {
   housePrice.setAttribute('placeholder', select.placeholder);
 });
 
-
 roomNumber.addEventListener('change', function () {
 
   var selectType = ROOM_QUANTITY[roomNumber.value];
@@ -369,7 +371,7 @@ roomNumber.addEventListener('change', function () {
     } else {
       option.removeAttribute('disabled');
 
-      if (capacity.value == option.value) {
+      if (capacity.value === option.value) {
         capacity.setCustomValidity('');
       }
 
@@ -396,3 +398,9 @@ title.addEventListener('invalid', function () {
 title.addEventListener('input', function (evt) {
   checkTitleLength(evt);
 });
+
+
+// form.addEventListener('submit', function (event) {
+
+//   event.preventDefault();
+// });
