@@ -1,4 +1,4 @@
-'use strict';
+use strict ';
 
 var CARDS_AMOUNT = 8;
 var TITLES = ['Большая уютная квартира', 'Маленькая неуютная квартира', 'Огромный прекрасный дворец', 'Маленький ужасный дворец', 'Красивый гостевой домик', 'Некрасивый негостеприимный домик', 'Уютное бунгало далеко от моря', 'Неуютное бунгало по колено в воде'];
@@ -50,7 +50,7 @@ var TYPES_OF_HOUSES = {
   }
 };
 
-var ROOM_QUANTITY = {
+var rooms = {
   1: {
     enabled: ['1'],
     textError: 'не более одного гостя'
@@ -99,9 +99,6 @@ var capacity = mapForm.querySelector('#capacity');
 var houseType = mapForm.querySelector('#type');
 var housePrice = mapForm.querySelector('#price');
 var formSubmitElement = mapForm.querySelector('.ad-form__submit');
-
-
-console.log(TYPES_OF_HOUSES['bungalo'].translate);
 
 var getUnique = function (titles) {
   var uniqueEl = titles[getRandom(0, titles.length)];
@@ -255,6 +252,7 @@ var onButtonMouseUp = function () {
   toggleDisabled(false, fieldsets);
   toggleDisabled(false, selects);
   removeOnButtonMouseUp();
+
 };
 
 var createCard = function (id) {
@@ -355,29 +353,36 @@ houseType.addEventListener('change', function () {
   housePrice.setAttribute('placeholder', select.placeholder);
 });
 
-roomNumber.addEventListener('change', function () {
+var options = capacity.querySelectorAll("option");
+var selectType = rooms[roomNumber.value];
+roomNumber.addEventListener("change", function () {
 
-  var selectType = ROOM_QUANTITY[roomNumber.value];
-
-  capacity.querySelectorAll('option').forEach(function (option) {
-
-    if (selectType.enabled.indexOf(option.value) === -1) {
-      option.setAttribute('disabled', 'disabled');
-
-      if (capacity.value === option.value) {
-        capacity.setCustomValidity(selectType.textError);
-      }
-
-    } else {
-      option.removeAttribute('disabled');
-
-      if (capacity.value === option.value) {
-        capacity.setCustomValidity('');
-      }
-
-    }
-  });
+  setOptions(selectType);
+  setValidity(selectType);
+  console.log(selectType);
+  console.log(roomNumber.value);
 });
+
+var setOptions = function (selectType) {
+
+  var checkValidity = function (value) {
+    console.log(selectType.enabled.indexOf(value) === -1);
+    return selectType.enabled.indexOf(value) === -1;
+  };
+
+  options.forEach(function (option) {
+    option.disabled = checkValidity(option.value);
+  });
+};
+
+var setValidity = function (selectType) {
+
+  var isValid = selectType.enabled.indexOf(capacity.value) !== -1;
+  console.log(selectType.enabled.indexOf(capacity.value));
+  var customValidity = isValid ? "" : selectType.textError;
+  capacity.setCustomValidity(customValidity);
+};
+
 
 capacity.addEventListener('change', function () {
   capacity.setCustomValidity('');
@@ -400,7 +405,7 @@ title.addEventListener('input', function (evt) {
 });
 
 
-// form.addEventListener('submit', function (event) {
+form.addEventListener('submit', function (event) {
 
-//   event.preventDefault();
-// });
+  event.preventDefault();
+});
