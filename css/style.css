@@ -1248,3 +1248,7 @@ fieldset {
   outline: none;
   opacity: 0.6;
 }
+
+select:invalid {
+  outline: solid red 2px;
+}
