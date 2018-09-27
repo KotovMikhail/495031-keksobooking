@@ -386,10 +386,10 @@ mainPin.addEventListener('mousedown', function (evt) {
 
     if (topPin < (LIMIT_TOP - PIN_HEIGHT / 2 - POINTER_HEIGHT)) {
       topPin = LIMIT_TOP - PIN_HEIGHT / 2 - POINTER_HEIGHT;
-      mapPinList.setAttribute('style', 'cursor: none');
+
     } else if (topPin > LIMIT_BOTTOM - PIN_HEIGHT / 2 - POINTER_HEIGHT) {
       topPin = LIMIT_BOTTOM - PIN_HEIGHT / 2 - POINTER_HEIGHT;
-      mapPinList.setAttribute('style', 'cursor: none');
+
     }
 
     mainPin.style.top = topPin + 'px';
@@ -400,7 +400,6 @@ mainPin.addEventListener('mousedown', function (evt) {
 
   var onMouseUp = function (upEvt) {
     upEvt.preventDefault();
-    mapPinList.setAttribute('style', 'cursor:');
 
     mapPinList.removeEventListener('mousemove', onMouseMove);
     mapPinList.removeEventListener('mouseup', onMouseUp);
