@@ -18,10 +18,10 @@ var MAX_LOCATION_X = 900;
 var MIN_LOCATION_Y = 130;
 var MAX_LOCATION_Y = 630;
 var IMAGE_NUM_RANGES = [1, 2, 3, 4, 5, 6, 7, 8];
-var PIN_WIDTH = 65;
-var PIN_HEIGHT = 65;
-var PIN_OFFSET_X = 570;
-var PIN_OFFSET_Y = 375;
+var PIN_HEIGHT = 62;
+var POINTER_HEIGHT = 22;
+var LIMIT_TOP = 200;
+var LIMIT_BOTTOM = 700;
 
 var MAP_PIN_ACTIVE_CLASS = 'map__pin--active';
 var ESC_KEYCODE = 27;
@@ -81,9 +81,6 @@ var cardTemplate = document.querySelector('#card')
 
 var mainPin = document.querySelector('.map__pin--main');
 var advertForm = document.querySelector('.ad-form');
-var inputAddress = document.querySelector('#address');
-var inputAddressLoad = Math.floor(PIN_OFFSET_X + PIN_WIDTH / 2) + ', ' + Math.floor(PIN_OFFSET_Y + PIN_HEIGHT / 2);
-var inputAddressActive = Math.floor(PIN_OFFSET_X + PIN_WIDTH / 2) + ', ' + Math.floor(PIN_OFFSET_Y + PIN_HEIGHT);
 
 var activeCardId;
 var currentPin = null;
@@ -96,6 +93,7 @@ var roomNumber = mapForm.querySelector('#room_number');
 var capacity = mapForm.querySelector('#capacity');
 var houseType = mapForm.querySelector('#type');
 var housePrice = mapForm.querySelector('#price');
+var inputAddress = mapForm.querySelector('#address');
 
 var getUnique = function (titles) {
   var uniqueEl = titles[getRandom(0, titles.length)];
@@ -236,13 +234,12 @@ window.addEventListener('load', function () {
   toggleDisabled(true, fieldsets);
   toggleDisabled(true, filterSelects);
   housePrice.setAttribute('placeholder', '1000');
-  inputAddress.value = inputAddressLoad;
   mainPin.addEventListener('mouseup', onButtonMouseUp);
+  inputAddress.setAttribute('value', parseInt(mainPin.style.left, 10) + ', ' + parseInt(mainPin.style.top, 10));
 });
 
 var onButtonMouseUp = function () {
   inputAddress.readOnly = true;
-  inputAddress.value = inputAddressActive;
   mapSection.classList.remove('map--faded');
   advertForm.classList.remove('ad-form--disabled');
   createPins(cardsArray);
@@ -359,3 +356,56 @@ var onTimeInChange = function () {
 var onTimeOutChange = function () {
   timeIn.value = timeOut.value;
 };
+
+mainPin.addEventListener('mousedown', function (evt) {
+  evt.preventDefault();
+
+  var startCoords = {
+    x: evt.clientX,
+    y: evt.clientY
+  };
+
+  var onMouseMove = function (moveEvt) {
+    moveEvt.preventDefault();
+
+    var shift = {
+      x: startCoords.x - moveEvt.clientX,
+      y: startCoords.y - moveEvt.clientY
+    };
+
+    startCoords = {
+      x: moveEvt.clientX,
+      y: moveEvt.clientY
+    };
+
+    var topPin = mainPin.offsetTop - shift.y;
+    var leftPin = mainPin.offsetLeft - shift.x;
+
+    // topPin - координата верхней границы метки, поэтому вычитаю из 100 высоту метки
+    // с учетом того, что у нее translate -50% (поэтому делю на 2) и еще есть высота псевдоэлемента
+
+    if (topPin < (LIMIT_TOP - PIN_HEIGHT / 2 - POINTER_HEIGHT)) {
+      topPin = LIMIT_TOP - PIN_HEIGHT / 2 - POINTER_HEIGHT;
+      mapPinList.setAttribute('style', 'cursor: none');
+    } else if (topPin > LIMIT_BOTTOM - PIN_HEIGHT / 2 - POINTER_HEIGHT) {
+      topPin = LIMIT_BOTTOM - PIN_HEIGHT / 2 - POINTER_HEIGHT;
+      mapPinList.setAttribute('style', 'cursor: none');
+    }
+
+    mainPin.style.top = topPin + 'px';
+    mainPin.style.left = leftPin + 'px';
+
+    inputAddress.setAttribute('value', Math.floor(leftPin) + ', ' + Math.floor((topPin) + PIN_HEIGHT / 2 + POINTER_HEIGHT));
+  };
+
+  var onMouseUp = function (upEvt) {
+    upEvt.preventDefault();
+    mapPinList.setAttribute('style', 'cursor:');
+
+    mapPinList.removeEventListener('mousemove', onMouseMove);
+    mapPinList.removeEventListener('mouseup', onMouseUp);
+  };
+
+  mapPinList.addEventListener('mousemove', onMouseMove);
+  mapPinList.addEventListener('mouseup', onMouseUp);
+});
