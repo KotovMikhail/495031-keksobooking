@@ -21,7 +21,7 @@ var IMAGE_NUM_RANGES = [1, 2, 3, 4, 5, 6, 7, 8];
 var PIN_HEIGHT = 62;
 var POINTER_HEIGHT = 22;
 var LIMIT_TOP = 200;
-var LIMIT_BOTTOM = 700;
+var LIMIT_BOTTOM = 680;
 
 var MAP_PIN_ACTIVE_CLASS = 'map__pin--active';
 var ESC_KEYCODE = 27;
@@ -381,11 +381,8 @@ mainPin.addEventListener('mousedown', function (evt) {
     var topPin = mainPin.offsetTop - shift.y;
     var leftPin = mainPin.offsetLeft - shift.x;
 
-    // topPin - координата верхней границы метки, поэтому вычитаю из 100 высоту метки
-    // с учетом того, что у нее translate -50% (поэтому делю на 2) и еще есть высота псевдоэлемента
-
-    if (topPin < (LIMIT_TOP - PIN_HEIGHT / 2 - POINTER_HEIGHT)) {
-      topPin = LIMIT_TOP - PIN_HEIGHT / 2 - POINTER_HEIGHT;
+    if (topPin < (LIMIT_TOP - PIN_HEIGHT / 2)) {
+      topPin = LIMIT_TOP - PIN_HEIGHT / 2;
 
     } else if (topPin > LIMIT_BOTTOM - PIN_HEIGHT / 2 - POINTER_HEIGHT) {
       topPin = LIMIT_BOTTOM - PIN_HEIGHT / 2 - POINTER_HEIGHT;
