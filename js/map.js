@@ -228,25 +228,6 @@ var toggleDisabled = function (isDisabled, nodes) {
   }
 };
 
-window.addEventListener('load', function () {
-  toggleDisabled(true, fieldsets);
-  toggleDisabled(true, filterSelects);
-  housePrice.setAttribute('placeholder', '1000');
-  mainPin.addEventListener('mouseup', onButtonMouseUp);
-  inputAddress.setAttribute('value', parseInt(mainPin.style.left, 10) + ', ' + parseInt(mainPin.style.top, 10));
-});
-
-var onButtonMouseUp = function () {
-  inputAddress.readOnly = true;
-  mapSection.classList.remove('map--faded');
-  advertForm.classList.remove('ad-form--disabled');
-  createPins(cardsArray);
-  toggleDisabled(false, fieldsets);
-  toggleDisabled(false, filterSelects);
-  removeOnButtonMouseUp();
-  mainPin.addEventListener('mousedown', setMouseMove);
-};
-
 var createCard = function (id) {
   activeCardId = id;
   currentCard = mapSection.appendChild(getCardData(cardsArray[id]));
@@ -356,9 +337,12 @@ var onTimeOutChange = function () {
   timeIn.value = timeOut.value;
 };
 
-var setMouseMove = function(evt) {
-  evt.preventDefault();
+var addAddress = function (top, left) {
+  inputAddress.setAttribute('value', Math.floor(left) + ', ' + Math.floor((top) + PIN_HEIGHT / 2 + POINTER_HEIGHT));
+};
 
+mainPin.addEventListener('mousedown', function (evt) {
+  evt.preventDefault();
   var startCoords = {
     x: evt.clientX,
     y: evt.clientY
@@ -396,16 +380,36 @@ var setMouseMove = function(evt) {
     mainPin.style.top = topPin + 'px';
     mainPin.style.left = leftPin + 'px';
 
-    inputAddress.setAttribute('value', Math.floor(leftPin) + ', ' + Math.floor((topPin) + PIN_HEIGHT / 2 + POINTER_HEIGHT));
+    if (!mapSection.classList.contains('map--faded')) {
+      addAddress(topPin, leftPin);
+    }
+
   };
 
   var onMouseUp = function (upEvt) {
     upEvt.preventDefault();
-
     document.removeEventListener('mousemove', onMouseMove);
     document.removeEventListener('mouseup', onMouseUp);
   };
 
   document.addEventListener('mousemove', onMouseMove);
   document.addEventListener('mouseup', onMouseUp);
+});
+
+var onButtonMouseUp = function () {
+  inputAddress.readOnly = true;
+  mapSection.classList.remove('map--faded');
+  advertForm.classList.remove('ad-form--disabled');
+  createPins(cardsArray);
+  toggleDisabled(false, fieldsets);
+  toggleDisabled(false, filterSelects);
+  removeOnButtonMouseUp();
 };
+
+window.addEventListener('load', function () {
+  toggleDisabled(true, fieldsets);
+  toggleDisabled(true, filterSelects);
+  housePrice.setAttribute('placeholder', '1000');
+  mainPin.addEventListener('mouseup', onButtonMouseUp);
+  inputAddress.setAttribute('value', parseInt(mainPin.style.left, 10) + ', ' + parseInt(mainPin.style.top, 10));
+});
