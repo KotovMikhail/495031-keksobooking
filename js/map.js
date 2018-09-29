@@ -20,13 +20,11 @@ var MAX_LOCATION_Y = 630;
 var IMAGE_NUM_RANGES = [1, 2, 3, 4, 5, 6, 7, 8];
 var PIN_HEIGHT = 62;
 var POINTER_HEIGHT = 22;
-var LIMIT_TOP = 200;
-var LIMIT_BOTTOM = 680;
-
+var WIDTH = 1140;
 var MAP_PIN_ACTIVE_CLASS = 'map__pin--active';
 var ESC_KEYCODE = 27;
 
-var typesOfHouses = {
+var TypesOfHouses = {
   'bungalo': {
     min: 0,
     placeholder: '0',
@@ -207,7 +205,7 @@ var getCardData = function (item) {
   cardItem.querySelector('.popup__title').textContent = item.offer.title;
   cardItem.querySelector('.popup__text--address').textContent = item.offer.address;
   cardItem.querySelector('.popup__text--price').textContent = item.offer.price + '\u20BD' + '/ночь';
-  cardItem.querySelector('.popup__type').textContent = typesOfHouses[item.offer.type].translate;
+  cardItem.querySelector('.popup__type').textContent = TypesOfHouses[item.offer.type].translate;
   cardItem.querySelector('.popup__text--capacity').textContent = roomNum + roomPhrase + ' для ' + guestNum + guestPhrase;
   cardItem.querySelector('.popup__text--time').textContent = 'Заезд после ' + item.offer.checkin + ' выезд после ' + item.offer.checkout;
   var cardFeatures = cardItem.querySelector('.popup__features');
@@ -246,6 +244,7 @@ var onButtonMouseUp = function () {
   toggleDisabled(false, fieldsets);
   toggleDisabled(false, filterSelects);
   removeOnButtonMouseUp();
+  mainPin.addEventListener('mousedown', setMouseMove);
 };
 
 var createCard = function (id) {
@@ -314,7 +313,7 @@ mapSection.addEventListener('click', function (evt) {
 
 houseType.addEventListener('change', function () {
 
-  var select = typesOfHouses[houseType.value];
+  var select = TypesOfHouses[houseType.value];
 
   housePrice.setAttribute('min', select.min);
   housePrice.setAttribute('placeholder', select.placeholder);
@@ -357,7 +356,7 @@ var onTimeOutChange = function () {
   timeIn.value = timeOut.value;
 };
 
-mainPin.addEventListener('mousedown', function (evt) {
+var setMouseMove = function(evt) {
   evt.preventDefault();
 
   var startCoords = {
@@ -381,12 +380,17 @@ mainPin.addEventListener('mousedown', function (evt) {
     var topPin = mainPin.offsetTop - shift.y;
     var leftPin = mainPin.offsetLeft - shift.x;
 
-    if (topPin < (LIMIT_TOP - PIN_HEIGHT / 2)) {
-      topPin = LIMIT_TOP - PIN_HEIGHT / 2;
+    if (leftPin < 0) {
+      leftPin = 0;
+    } else if (leftPin > WIDTH) {
+      leftPin = WIDTH;
+    }
 
-    } else if (topPin > LIMIT_BOTTOM - PIN_HEIGHT / 2 - POINTER_HEIGHT) {
-      topPin = LIMIT_BOTTOM - PIN_HEIGHT / 2 - POINTER_HEIGHT;
+    if (topPin < MIN_LOCATION_Y) {
+      topPin = MIN_LOCATION_Y;
 
+    } else if (topPin > MAX_LOCATION_Y) {
+      topPin = MAX_LOCATION_Y;
     }
 
     mainPin.style.top = topPin + 'px';
@@ -398,10 +402,10 @@ mainPin.addEventListener('mousedown', function (evt) {
   var onMouseUp = function (upEvt) {
     upEvt.preventDefault();
 
-    mapPinList.removeEventListener('mousemove', onMouseMove);
-    mapPinList.removeEventListener('mouseup', onMouseUp);
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
   };
 
-  mapPinList.addEventListener('mousemove', onMouseMove);
-  mapPinList.addEventListener('mouseup', onMouseUp);
-});
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', onMouseUp);
+};
