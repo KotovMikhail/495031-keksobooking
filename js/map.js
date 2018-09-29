@@ -336,7 +336,7 @@ var onTimeOutChange = function () {
 };
 
 var addAddress = function (top, left) {
-  inputAddress.setAttribute('value', Math.floor(left) + ', ' + Math.floor(top - PIN_HEIGHT));
+  inputAddress.setAttribute('value', Math.floor(left) + ', ' + Math.floor(top));
 };
 
 var HALF_MAIN_PIN_WIDTH = mainPin.offsetWidth / 2;
