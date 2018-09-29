@@ -13,14 +13,11 @@ var MIN_ROOM = 1;
 var MAX_ROOM = 5;
 var MIN_GUESTS = 1;
 var MAX_GUESTS = 5;
-var MIN_LOCATION_X = 100;
-var MAX_LOCATION_X = 900;
-var MIN_LOCATION_Y = 130;
+var MIN_LOCATION_Y = 100;
 var MAX_LOCATION_Y = 630;
 var IMAGE_NUM_RANGES = [1, 2, 3, 4, 5, 6, 7, 8];
-var PIN_HEIGHT = 62;
-var POINTER_HEIGHT = 22;
-var WIDTH = 1140;
+var PIN_HEIGHT = 65;
+var PIN_WIDTH = 65;
 var MAP_PIN_ACTIVE_CLASS = 'map__pin--active';
 var ESC_KEYCODE = 27;
 
@@ -92,6 +89,7 @@ var capacity = mapForm.querySelector('#capacity');
 var houseType = mapForm.querySelector('#type');
 var housePrice = mapForm.querySelector('#price');
 var inputAddress = mapForm.querySelector('#address');
+var widthMap = mapPinList.offsetWidth;
 
 var getUnique = function (titles) {
   var uniqueEl = titles[getRandom(0, titles.length)];
@@ -115,7 +113,7 @@ var shuffleArray = function (array) {
 };
 
 var createObject = function () {
-  var locationX = getRandom(MIN_LOCATION_X, MAX_LOCATION_X);
+  var locationX = getRandom(0, (widthMap - PIN_WIDTH / 2));
   var locationY = getRandom(MIN_LOCATION_Y, MAX_LOCATION_Y);
   return {
     author: {
@@ -124,7 +122,7 @@ var createObject = function () {
 
     offer: {
       title: getUnique(TITLES),
-      address: locationX + ', ' + locationY,
+      address: getRandom((MIN_LOCATION_Y + PIN_HEIGHT, MAX_LOCATION_Y - PIN_HEIGHT) + PIN_HEIGHT),
       price: getRandom(MIN_PRICE, MAX_PRICE),
       type: TYPES[getRandom(0, TYPES.length)],
       rooms: getRandom(MIN_ROOM, MAX_ROOM + MIN_ROOM),
@@ -338,10 +336,16 @@ var onTimeOutChange = function () {
 };
 
 var addAddress = function (top, left) {
-  inputAddress.setAttribute('value', Math.floor(left) + ', ' + Math.floor((top) + PIN_HEIGHT / 2 + POINTER_HEIGHT));
+  inputAddress.setAttribute('value', Math.floor(left) + ', ' + Math.floor(top - PIN_HEIGHT));
 };
 
+var HALF_MAIN_PIN_WIDTH = mainPin.offsetWidth / 2;
+
+
 mainPin.addEventListener('mousedown', function (evt) {
+  var leftPin = HALF_MAIN_PIN_WIDTH + mainPin.offsetLeft;
+  var topPin = PIN_HEIGHT + mainPin.offsetTop;
+
   evt.preventDefault();
   var startCoords = {
     x: evt.clientX,
@@ -361,29 +365,28 @@ mainPin.addEventListener('mousedown', function (evt) {
       y: moveEvt.clientY
     };
 
-    var topPin = mainPin.offsetTop - shift.y;
-    var leftPin = mainPin.offsetLeft - shift.x;
-
-    if (leftPin < 0) {
-      leftPin = 0;
-    } else if (leftPin > WIDTH) {
-      leftPin = WIDTH;
+    if (mainPin.offsetLeft - shift.x < 0) {
+      mainPin.style.left = -1 * (HALF_MAIN_PIN_WIDTH) + 'px';
+    } else if (mainPin.offsetLeft - shift.x > widthMap - HALF_MAIN_PIN_WIDTH) {
+      mainPin.style.left = widthMap - HALF_MAIN_PIN_WIDTH + 'px';
+    } else {
+      mainPin.style.left = (mainPin.offsetLeft - shift.x) + 'px';
     }
 
-    if (topPin < MIN_LOCATION_Y) {
-      topPin = MIN_LOCATION_Y;
-
-    } else if (topPin > MAX_LOCATION_Y) {
-      topPin = MAX_LOCATION_Y;
+    if (mainPin.offsetTop > MAX_LOCATION_Y) {
+      mainPin.style.top = MAX_LOCATION_Y + 'px';
+    } else if (mainPin.offsetTop - shift.y < MIN_LOCATION_Y) {
+      mainPin.style.top = MIN_LOCATION_Y + 'px';
+    } else {
+      mainPin.style.top = (mainPin.offsetTop - shift.y) + 'px';
     }
 
-    mainPin.style.top = topPin + 'px';
-    mainPin.style.left = leftPin + 'px';
+    leftPin = HALF_MAIN_PIN_WIDTH + mainPin.offsetLeft;
+    topPin = mainPin.offsetTop;
 
     if (!mapSection.classList.contains('map--faded')) {
       addAddress(topPin, leftPin);
     }
-
   };
 
   var onMouseUp = function (upEvt) {
