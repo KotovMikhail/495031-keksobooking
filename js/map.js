@@ -341,6 +341,10 @@ var addAddress = function (top, left) {
   inputAddress.setAttribute('value', Math.floor(left) + ', ' + Math.floor(top));
 };
 
+var setAddress = function () {
+  inputAddress.setAttribute('value', parseInt(mainPin.style.left, 10) + ', ' + parseInt(mainPin.style.top, 10));
+};
+
 mainPin.addEventListener('mousedown', function (evt) {
   evt.preventDefault();
   var startCoords = {
@@ -360,9 +364,9 @@ mainPin.addEventListener('mousedown', function (evt) {
       x: moveEvt.clientX,
       y: moveEvt.clientY
     };
-
     var leftPin = HALF_MAIN_PIN_WIDTH + mainPin.offsetLeft;
     var topPin = PIN_HEIGHT + PIN_ARROW_HEIGHT + mainPin.offsetTop;
+
 
     if (mainPin.offsetLeft - shift.x < 0) {
       mainPin.style.left = 0 + 'px';
@@ -403,7 +407,7 @@ var onButtonMouseUp = function () {
   toggleDisabled(false, fieldsets);
   toggleDisabled(false, filterSelects);
   removeOnButtonMouseUp();
-
+  setAddress();
 };
 
 window.addEventListener('load', function () {
@@ -411,5 +415,5 @@ window.addEventListener('load', function () {
   toggleDisabled(true, filterSelects);
   housePrice.setAttribute('placeholder', '1000');
   mainPin.addEventListener('mouseup', onButtonMouseUp);
-  inputAddress.setAttribute('value', parseInt(mainPin.style.left, 10) + ', ' + parseInt(mainPin.style.top, 10));
+  setAddress();
 });
