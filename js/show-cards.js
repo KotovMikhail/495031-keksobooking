@@ -1,0 +1,64 @@
+'use strict';
+
+(function () {
+  var activeCardId;
+  var currentPin = null;
+  var currentCard = null;
+
+  var createCard = function (id) {
+    activeCardId = id;
+    currentCard = window.elements.mapSection.appendChild(window.card.getCardData(window.cardsArray[id]));
+    document.addEventListener('keydown', onPopupEscPress);
+  };
+
+  var removeCard = function () {
+    if (currentCard) {
+      window.elements.mapSection.removeChild(currentCard);
+      currentCard = null;
+    }
+  };
+
+  var onPopupEscPress = function (evt) {
+    if (evt.keyCode === window.constants.ESC_KEYCODE) {
+      removeCard();
+      document.removeEventListener('keydown', onPopupEscPress);
+      currentPin.classList.remove(window.constants.MAP_PIN_ACTIVE_CLASS);
+      activeCardId = null;
+      currentPin.blur();
+    }
+  };
+
+  var checkActive = function () {
+    removeCard();
+
+    if (currentPin) {
+      currentPin.classList.remove(window.constants.MAP_PIN_ACTIVE_CLASS);
+      activeCardId = null;
+    }
+  };
+
+  var showCard = function (evt) {
+    var target = evt.target;
+    var pinButton = target.closest('.map__pin:not(.map__pin--main)');
+    var buttonClose = target.className === 'popup__close';
+    window.times.timeIn.addEventListener('change', window.times.onTimeInChange);
+    window.times.timeOut.addEventListener('change', window.times.onTimeOutChange);
+
+    if (buttonClose) {
+      checkActive();
+    }
+
+    if (!pinButton || (pinButton && activeCardId === pinButton.dataset.id)) {
+      return;
+    }
+
+    checkActive();
+    currentPin = pinButton;
+    createCard(pinButton.dataset.id);
+    pinButton.classList.add(window.constants.MAP_PIN_ACTIVE_CLASS);
+  };
+
+  window.elements.mapSection.addEventListener('click', function (evt) {
+    showCard(evt);
+  });
+})();
