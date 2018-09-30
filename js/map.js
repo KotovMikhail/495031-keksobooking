@@ -18,6 +18,8 @@ var MAX_LOCATION_Y = 630;
 var IMAGE_NUM_RANGES = [1, 2, 3, 4, 5, 6, 7, 8];
 var PIN_HEIGHT = 65;
 var PIN_WIDTH = 65;
+var PIN_ARROW_HEIGHT = 22;
+var HALF_MAIN_PIN_WIDTH = PIN_WIDTH / 2;
 var MAP_PIN_ACTIVE_CLASS = 'map__pin--active';
 var ESC_KEYCODE = 27;
 
@@ -339,13 +341,7 @@ var addAddress = function (top, left) {
   inputAddress.setAttribute('value', Math.floor(left) + ', ' + Math.floor(top));
 };
 
-var HALF_MAIN_PIN_WIDTH = mainPin.offsetWidth / 2;
-
-
 mainPin.addEventListener('mousedown', function (evt) {
-  var leftPin = HALF_MAIN_PIN_WIDTH + mainPin.offsetLeft;
-  var topPin = PIN_HEIGHT + mainPin.offsetTop;
-
   evt.preventDefault();
   var startCoords = {
     x: evt.clientX,
@@ -365,24 +361,24 @@ mainPin.addEventListener('mousedown', function (evt) {
       y: moveEvt.clientY
     };
 
+    var leftPin = HALF_MAIN_PIN_WIDTH + mainPin.offsetLeft;
+    var topPin = PIN_HEIGHT + PIN_ARROW_HEIGHT + mainPin.offsetTop;
+
     if (mainPin.offsetLeft - shift.x < 0) {
-      mainPin.style.left = -1 * (HALF_MAIN_PIN_WIDTH) + 'px';
-    } else if (mainPin.offsetLeft - shift.x > widthMap - HALF_MAIN_PIN_WIDTH) {
-      mainPin.style.left = widthMap - HALF_MAIN_PIN_WIDTH + 'px';
+      mainPin.style.left = 0 + 'px';
+    } else if (mainPin.offsetLeft - shift.x > widthMap - PIN_WIDTH) {
+      mainPin.style.left = widthMap - PIN_WIDTH + 'px';
     } else {
       mainPin.style.left = (mainPin.offsetLeft - shift.x) + 'px';
     }
 
-    if (mainPin.offsetTop > MAX_LOCATION_Y) {
+    if (mainPin.offsetTop - shift.y > MAX_LOCATION_Y) {
       mainPin.style.top = MAX_LOCATION_Y + 'px';
     } else if (mainPin.offsetTop - shift.y < MIN_LOCATION_Y) {
       mainPin.style.top = MIN_LOCATION_Y + 'px';
     } else {
       mainPin.style.top = (mainPin.offsetTop - shift.y) + 'px';
     }
-
-    leftPin = HALF_MAIN_PIN_WIDTH + mainPin.offsetLeft;
-    topPin = mainPin.offsetTop;
 
     if (!mapSection.classList.contains('map--faded')) {
       addAddress(topPin, leftPin);
@@ -407,6 +403,7 @@ var onButtonMouseUp = function () {
   toggleDisabled(false, fieldsets);
   toggleDisabled(false, filterSelects);
   removeOnButtonMouseUp();
+
 };
 
 window.addEventListener('load', function () {
