@@ -44,6 +44,7 @@
 
     if (buttonClose) {
       removeActiveCard();
+      document.removeEventListener('keydown', onPopupEscPress);
     }
 
     if (!pinButton || (activeCardId === pinButton.dataset.id)) {
