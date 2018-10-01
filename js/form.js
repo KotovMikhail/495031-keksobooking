@@ -2,26 +2,6 @@
 
 (function () {
 
-
-  var Rooms = {
-    1: {
-      enabled: ['1'],
-      textError: 'не более одного гостя'
-    },
-    2: {
-      enabled: ['1', '2'],
-      textError: 'не более одного или двух гостей'
-    },
-    3: {
-      enabled: ['1', '2', '3'],
-      textError: 'не более одного, двух или трёх гостей'
-    },
-    100: {
-      enabled: ['0'],
-      textError: 'не для гостей'
-    }
-  };
-
   var roomNumber = window.elements.mapForm.querySelector('#room_number');
   var capacity = window.elements.mapForm.querySelector('#capacity');
   var houseType = window.elements.mapForm.querySelector('#type');
@@ -42,7 +22,7 @@
 
   houseType.addEventListener('change', function () {
 
-    var select = window.TypesOfHouses[houseType.value];
+    var select = window.constants.TypesOfHouses[houseType.value];
 
     housePrice.setAttribute('min', select.min);
     housePrice.setAttribute('placeholder', select.placeholder);
@@ -52,7 +32,7 @@
 
 
   roomNumber.addEventListener('change', function () {
-    var selectType = Rooms[roomNumber.value];
+    var selectType = window.constants.Rooms[roomNumber.value];
     setOptions(selectType);
     setValidity(selectType);
   });

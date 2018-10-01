@@ -43,7 +43,7 @@
     cardItem.querySelector('.popup__title').textContent = item.offer.title;
     cardItem.querySelector('.popup__text--address').textContent = item.offer.address;
     cardItem.querySelector('.popup__text--price').textContent = item.offer.price + '\u20BD' + '/ночь';
-    cardItem.querySelector('.popup__type').textContent = window.TypesOfHouses[item.offer.type].translate;
+    cardItem.querySelector('.popup__type').textContent = window.constants.TypesOfHouses[item.offer.type].translate;
     cardItem.querySelector('.popup__text--capacity').textContent = roomNum + roomPhrase + ' для ' + guestNum + guestPhrase;
     cardItem.querySelector('.popup__text--time').textContent = 'Заезд после ' + item.offer.checkin + ' выезд после ' + item.offer.checkout;
     var cardFeatures = cardItem.querySelector('.popup__features');
@@ -54,7 +54,6 @@
     cardPhotos.innerHTML = '';
     cardPhotos.appendChild(createFragmentPhotos(item.offer.photos));
     cardItem.querySelector('.popup__avatar').src = item.author.avatar;
-    window.elements.mapSection.appendChild(cardItem);
     return cardItem;
   };
 
