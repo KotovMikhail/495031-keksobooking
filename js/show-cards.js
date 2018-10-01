@@ -1,15 +1,9 @@
 'use strict';
-
+// отображает карточку при клике на пин и закрывает карточку
 (function () {
   var activeCardId;
   var currentPin = null;
   var currentCard = null;
-
-  var createCard = function (id) {
-    activeCardId = id;
-    currentCard = window.elements.mapSection.appendChild(window.card.getCardData(window.cardsArray[id]));
-    document.addEventListener('keydown', onPopupEscPress);
-  };
 
   var removeCard = function () {
     if (currentCard) {
@@ -28,7 +22,7 @@
     }
   };
 
-  var checkActive = function () {
+  var removeActiveCard = function () {
     removeCard();
 
     if (currentPin) {
@@ -37,22 +31,26 @@
     }
   };
 
+  var createCard = function (id) {
+    activeCardId = id;
+    currentCard = window.elements.mapSection.appendChild(window.getCardData(window.dates[id]));
+    document.addEventListener('keydown', onPopupEscPress);
+  };
+
   var showCard = function (evt) {
     var target = evt.target;
     var pinButton = target.closest('.map__pin:not(.map__pin--main)');
     var buttonClose = target.className === 'popup__close';
-    window.times.timeIn.addEventListener('change', window.times.onTimeInChange);
-    window.times.timeOut.addEventListener('change', window.times.onTimeOutChange);
 
     if (buttonClose) {
-      checkActive();
+      removeActiveCard();
     }
 
-    if (!pinButton || (pinButton && activeCardId === pinButton.dataset.id)) {
+    if (!pinButton || (activeCardId === pinButton.dataset.id)) {
       return;
     }
 
-    checkActive();
+    removeActiveCard();
     currentPin = pinButton;
     createCard(pinButton.dataset.id);
     pinButton.classList.add(window.constants.MAP_PIN_ACTIVE_CLASS);

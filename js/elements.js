@@ -10,6 +10,7 @@
     cardTemplate: document.querySelector('#card').content.querySelector('.map__card'),
     mainPin: document.querySelector('.map__pin--main'),
     advertForm: document.querySelector('.ad-form'),
-    mapForm: document.querySelector('.ad-form ')
+    mapForm: document.querySelector('.ad-form '),
+    fragmentPins: document.createDocumentFragment()
   };
 })();

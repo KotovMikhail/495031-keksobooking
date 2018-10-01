@@ -2,28 +2,6 @@
 
 (function () {
 
-  window.TypesOfHouses = {
-    'bungalo': {
-      min: 0,
-      placeholder: '0',
-      translate: 'Бунгало'
-    },
-    'flat': {
-      min: 1000,
-      placeholder: '1000',
-      translate: 'Квартира'
-    },
-    'house': {
-      min: 5000,
-      placeholder: '5000',
-      translate: 'Дом'
-    },
-    'palace': {
-      min: 10000,
-      placeholder: '10000',
-      translate: 'Дворец'
-    }
-  };
 
   var Rooms = {
     1: {
@@ -44,24 +22,23 @@
     }
   };
 
-
   var roomNumber = window.elements.mapForm.querySelector('#room_number');
   var capacity = window.elements.mapForm.querySelector('#capacity');
   var houseType = window.elements.mapForm.querySelector('#type');
   var housePrice = window.elements.mapForm.querySelector('#price');
+  var timeIn = window.elements.mapForm.querySelector('#timein');
+  var timeOut = window.elements.mapForm.querySelector('#timeout');
 
-  window.times = {
-    timeIn: window.elements.mapForm.querySelector('#timein'),
-    timeOut: window.elements.mapForm.querySelector('#timeout'),
-
-    onTimeInChange: function () {
-      this.timeOut.value = this.timeIn.value;
-    },
-
-    onTimeOutChange: function () {
-      this.timeIn.value = this.timeOut.value;
-    }
+  var onTimeInChange = function () {
+    timeOut.value = timeIn.value;
   };
+
+  var onTimeOutChange = function () {
+    timeIn.value = timeOut.value;
+  };
+
+  timeIn.addEventListener('change', onTimeInChange);
+  timeOut.addEventListener('change', onTimeOutChange);
 
   houseType.addEventListener('change', function () {
 
