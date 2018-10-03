@@ -57,6 +57,8 @@
     document.addEventListener('mouseup', onMouseUp);
   });
 
+
+
   var createPins = function (icons) {
     for (var i = 0; i < icons.length; i++) {
       var pinElem = window.elements.pinTemplate.cloneNode(true);
@@ -73,7 +75,7 @@
   var onButtonMouseUp = function () {
     window.elements.mapSection.classList.remove('map--faded');
     window.elements.advertForm.classList.remove('ad-form--disabled');
-    createPins(window.dates);
+    createPins(window.advert);
     window.toggleDisabled(false, window.elements.fieldsets);
     window.toggleDisabled(false, window.elements.filterSelects);
     removeOnButtonMouseUp();
@@ -90,5 +92,17 @@
   var removeOnButtonMouseUp = function () {
     window.elements.mainPin.removeEventListener('mouseup', onButtonMouseUp);
   };
+
+  var onLoadSuccess = function (advert) {
+    window.advert = advert;
+  };
+
+  var onLoadError = function (errorMessage) {
+    var messagePopup = window.elements.errorTemplate.cloneNode(true);
+    messagePopup.querySelector('.error__message').textContent = errorMessage;
+    window.elements.mapSection.appendChild(messagePopup);
+  };
+
+  window.backend.load(onLoadSuccess, onLoadError);
 
 })();

@@ -33,7 +33,7 @@
 
   var createCard = function (id) {
     activeCardId = id;
-    currentCard = window.elements.mapSection.appendChild(window.getCardData(window.dates[id]));
+    currentCard = window.elements.mapSection.appendChild(window.getCardData(window.advert[id]));
     document.addEventListener('keydown', onPopupEscPress);
   };
 
