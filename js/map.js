@@ -2,6 +2,8 @@
 (function () {
   window.widthMap = window.elements.mapPinList.offsetWidth;
   var inputAddress = window.elements.mapForm.querySelector('#address');
+  var errorPopup = window.elements.errorTemplate.cloneNode(true);
+  var errorButton = errorPopup.querySelector('.error__button');
 
   window.elements.mainPin.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
@@ -93,14 +95,35 @@
     window.elements.mainPin.removeEventListener('mouseup', onButtonMouseUp);
   };
 
+  var onMessageEscPress = function (evt) {
+    if (evt.keyCode === window.constants.ESC_KEYCODE || evt.which === 1) {
+      errorPopup.classList.add('hidden');
+      document.removeEventListener('keydown', onMessageEscPress);
+      document.removeEventListener('click', onMessageEscPress);
+    }
+  };
+
+  var onButtonErrorClick = function (evt) {
+    if (evt.keyCode === window.constants.ENTER_KEYCODE || evt.which === 1) {
+      errorPopup.classList.add('hidden');
+      errorButton.removeEventListener('click', onButtonErrorClick)
+    }
+  };
+
   var onLoadSuccess = function (advert) {
     window.advert = advert;
   };
 
   var onLoadError = function (errorMessage) {
-    var messagePopup = window.elements.errorTemplate.cloneNode(true);
-    messagePopup.querySelector('.error__message').textContent = errorMessage;
-    window.elements.mapSection.appendChild(messagePopup);
+    errorPopup.querySelector('.error__message').textContent = errorMessage;
+    errorButton.addEventListener('click', onButtonErrorClick);
+    errorButton.focus();
+    errorButton.setAttribute('tabindex', '0');
+    errorButton.style.border = '2px solid yellow';
+
+    document.addEventListener('keydown', onMessageEscPress);
+    document.addEventListener('click', onButtonErrorClick);
+    window.elements.mapSection.appendChild(errorPopup);
   };
 
   window.backend.load(onLoadSuccess, onLoadError);

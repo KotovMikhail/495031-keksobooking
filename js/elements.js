@@ -13,5 +13,6 @@
     mapForm: document.querySelector('.ad-form '),
     fragmentPins: document.createDocumentFragment(),
     errorTemplate: document.querySelector('#error').content.querySelector('.error'),
+    successTemplate: document.querySelector('#success').content.querySelector('.success'),
   };
 })();

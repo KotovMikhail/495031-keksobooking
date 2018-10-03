@@ -57,7 +57,7 @@
     pinButton.classList.add(window.constants.MAP_PIN_ACTIVE_CLASS);
   };
 
-  window.elements.mapSection.addEventListener('click', function (evt) {
-    showCard(evt);
-  });
+  window.elements.mapSection.addEventListener('click', showCard);
+
+
 })();
