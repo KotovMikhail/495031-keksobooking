@@ -74,7 +74,7 @@
     window.elements.mapPinList.appendChild(window.elements.fragmentPins);
   };
 
-  var onButtonMouseUp = function () {
+  window.window.onButtonMouseUp = function () {
     window.elements.mapSection.classList.remove('map--faded');
     window.elements.advertForm.classList.remove('ad-form--disabled');
     createPins(window.advert);
@@ -87,12 +87,12 @@
   window.addEventListener('load', function () {
     window.toggleDisabled(true, window.elements.fieldsets);
     window.toggleDisabled(true, window.elements.filterSelects);
-    window.elements.mainPin.addEventListener('mouseup', onButtonMouseUp);
+    window.elements.mainPin.addEventListener('mouseup', window.onButtonMouseUp);
     window.setAddress();
   });
 
   var removeOnButtonMouseUp = function () {
-    window.elements.mainPin.removeEventListener('mouseup', onButtonMouseUp);
+    window.elements.mainPin.removeEventListener('mouseup', window.onButtonMouseUp);
   };
 
   var onMessageEscPress = function (evt) {

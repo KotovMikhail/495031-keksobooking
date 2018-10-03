@@ -3,12 +3,13 @@
 (function () {
   var activeCardId;
   var currentPin = null;
-  var currentCard = null;
+  window.currentCard = null;
 
   var removeCard = function () {
-    if (currentCard) {
-      window.elements.mapSection.removeChild(currentCard);
-      currentCard = null;
+    if (window.currentCard) {
+      window.elements.mapSection.removeChild(window.currentCard);
+
+      window.currentCard = null;
     }
   };
 
@@ -33,7 +34,7 @@
 
   var createCard = function (id) {
     activeCardId = id;
-    currentCard = window.elements.mapSection.appendChild(window.getCardData(window.advert[id]));
+    window.currentCard = window.elements.mapSection.appendChild(window.getCardData(window.advert[id]));
     document.addEventListener('keydown', onPopupEscPress);
   };
 
