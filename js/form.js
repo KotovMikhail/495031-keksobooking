@@ -85,7 +85,7 @@
 
   var onUploadSuccess = function () {
     window.elements.mapSection.appendChild(successPopup);
-    onRresetClick();
+    onResetClick();
     document.addEventListener('keyup', onSuccessEscPress);
     document.addEventListener('click', onSuccessButtonClick);
   };
@@ -96,7 +96,7 @@
     }
   };
 
-  var onButtonErrorKyeup = function (evt) {
+  var onButtonErrorKeyup = function (evt) {
     if (evt.keyCode === window.constants.ENTER_KEYCODE) {
       removeErrorListeners();
     }
@@ -108,7 +108,7 @@
 
   var removeErrorListeners = function () {
     window.elements.mapSection.removeChild(errorPopup);
-    errorButton.removeEventListener('keyup', onButtonErrorKyeup);
+    errorButton.removeEventListener('keyup', onButtonErrorKeyup);
     document.removeEventListener('keyup', onEscErrorKeyup);
     document.removeEventListener('click', onButtonErrorClick);
   };
@@ -120,7 +120,7 @@
     errorButton.style.border = '2px solid yellow';
     window.elements.mapSection.appendChild(errorPopup);
 
-    errorButton.addEventListener('keyup', onButtonErrorKyeup);
+    errorButton.addEventListener('keyup', onButtonErrorKeyup);
     document.addEventListener('keyup', onEscErrorKeyup);
     document.addEventListener('click', onButtonErrorClick);
   };
@@ -130,19 +130,19 @@
     evt.preventDefault();
   });
 
-  var returnAddress = function () {
+  var resetMainPin = function () {
     window.elements.mainPin.style.left = window.constants.PIN_LEFT_COORD + 'px';
     window.elements.mainPin.style.top = window.constants.PIN_TOP_COORD + 'px';
   };
 
   var clearMap = function () {
-    var pins = window.elements.mapPinList.querySelectorAll('.map__pin:not(.map__pin--main');
+    var pins = window.elements.mapPinList.querySelectorAll('.map__pin:not(.map__pin--main)');
     for (var i = 0; i < pins.length; i++) {
       pins[i].remove(pins[i]);
     }
   };
 
-  var onRresetClick = function () {
+  var onResetClick = function () {
     var openedCard = window.elements.mapSection.querySelector('.map__card');
 
     featureCheckboxes.forEach(function (element) {
@@ -152,9 +152,9 @@
     });
 
     if (openedCard) {
-      window.activeCardId = null;
-      window.currentPin = null;
-      window.currentCard = null;
+      window.showCard.activeCardId = null;
+      window.showCard.currentPin = null;
+      window.showCard.currentCard = null;
       window.elements.mapSection.removeChild(openedCard);
     }
 
@@ -167,14 +167,15 @@
     window.elements.advertForm.classList.add('ad-form--disabled');
     window.util.toggleDisabled(true, window.elements.fieldsets);
     window.util.toggleDisabled(true, window.elements.filterSelects);
-    capacity.selectedIndex = 2;
-    roomNumber.selectedIndex = 0;
+    capacity.selectedIndex = window.constants.CAPACITY_SELECTED;
+    roomNumber.selectedIndex = window.constants.ROOM_SELECTED;
+
     clearMap();
-    returnAddress();
+    resetMainPin();
     window.setAddress();
     window.elements.mainPin.addEventListener('mouseup', window.onButtonMouseUp);
   };
 
-  resetButton.addEventListener('click', onRresetClick);
+  resetButton.addEventListener('click', onResetClick);
 
 })();

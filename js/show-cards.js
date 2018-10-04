@@ -1,15 +1,19 @@
 'use strict';
 // отображает карточку при клике на пин и закрывает карточку
 (function () {
-  window.activeCardId = null;
-  window.currentPin = null;
-  window.currentCard = null;
+
+  window.showCard = {
+    activeCardId: null,
+    currentPin: null,
+    currentCard: null
+  };
+
 
   var removeCard = function () {
-    if (window.currentCard) {
-      window.elements.mapSection.removeChild(window.currentCard);
+    if (window.showCard.currentCard) {
+      window.elements.mapSection.removeChild(window.showCard.currentCard);
 
-      window.currentCard = null;
+      window.showCard.currentCard = null;
     }
   };
 
@@ -17,24 +21,24 @@
     if (evt.keyCode === window.constants.ESC_KEYCODE) {
       removeCard();
       document.removeEventListener('keydown', onPopupEscPress);
-      window.currentPin.classList.remove(window.constants.MAP_PIN_ACTIVE_CLASS);
-      window.activeCardId = null;
-      window.currentPin.blur();
+      window.showCard.currentPin.classList.remove(window.constants.MAP_PIN_ACTIVE_CLASS);
+      window.showCard.activeCardId = null;
+      window.showCard.currentPin.blur();
     }
   };
 
   var removeActiveCard = function () {
     removeCard();
 
-    if (window.currentPin) {
-      window.currentPin.classList.remove(window.constants.MAP_PIN_ACTIVE_CLASS);
-      window.activeCardId = null;
+    if (window.showCard.currentPin) {
+      window.showCard.currentPin.classList.remove(window.constants.MAP_PIN_ACTIVE_CLASS);
+      window.showCard.activeCardId = null;
     }
   };
 
   var createCard = function (id) {
-    window.activeCardId = id;
-    window.currentCard = window.elements.mapSection.appendChild(window.getCardData(window.advert[id]));
+    window.showCard.activeCardId = id;
+    window.showCard.currentCard = window.elements.mapSection.appendChild(window.getCardData(window.advert[id]));
     document.addEventListener('keydown', onPopupEscPress);
   };
 
@@ -48,17 +52,16 @@
       document.removeEventListener('keydown', onPopupEscPress);
     }
 
-    if (!pinButton || (window.activeCardId === pinButton.dataset.id)) {
+    if (!pinButton || (window.showCard.activeCardId === pinButton.dataset.id)) {
       return;
     }
 
     removeActiveCard();
-    window.currentPin = pinButton;
+    window.showCard.currentPin = pinButton;
     createCard(pinButton.dataset.id);
     pinButton.classList.add(window.constants.MAP_PIN_ACTIVE_CLASS);
   };
 
   window.elements.mapSection.addEventListener('click', showCard);
-
 
 })();

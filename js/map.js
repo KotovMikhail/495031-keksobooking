@@ -4,8 +4,10 @@
   var inputAddress = window.elements.mapForm.querySelector('#address');
   var errorPopup = window.elements.errorTemplate.cloneNode(true);
   var errorButton = errorPopup.querySelector('.error__button');
+  var messageContainer = errorPopup.querySelector('.error__message');
 
   window.elements.mainPin.addEventListener('mousedown', function (evt) {
+
     evt.preventDefault();
     var startCoords = {
       x: evt.clientX,
@@ -117,7 +119,8 @@
   };
 
   var onLoadError = function (errorMessage) {
-    errorPopup.querySelector('.error__message').textContent = errorMessage;
+
+    messageContainer.textContent = errorMessage;
     errorButton.setAttribute('tabindex', '0');
 
     errorButton.addEventListener('keyup', onEnterErrorClick);
@@ -127,12 +130,12 @@
     window.elements.mapSection.appendChild(errorPopup);
   };
 
-  window.addEventListener('load', function () {
+  var onLoadEnabled = function () {
     window.util.toggleDisabled(true, window.elements.fieldsets);
     window.util.toggleDisabled(true, window.elements.filterSelects);
     window.elements.mainPin.addEventListener('mouseup', window.onButtonMouseUp);
     window.setAddress();
-  });
+  };
 
-
+  window.addEventListener('load', onLoadEnabled);
 })();
