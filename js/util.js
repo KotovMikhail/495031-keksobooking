@@ -22,6 +22,12 @@
         finalArr[j] = tmp;
       }
       return finalArr;
+    },
+
+    toggleDisabled: function (isDisabled, nodes) {
+      for (var i = 0; i < nodes.length; i++) {
+        nodes[i].disabled = isDisabled;
+      }
     }
 
   };

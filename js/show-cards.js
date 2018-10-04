@@ -1,8 +1,8 @@
 'use strict';
 // отображает карточку при клике на пин и закрывает карточку
 (function () {
-  var activeCardId;
-  var currentPin = null;
+  window.activeCardId = null;
+  window.currentPin = null;
   window.currentCard = null;
 
   var removeCard = function () {
@@ -17,23 +17,23 @@
     if (evt.keyCode === window.constants.ESC_KEYCODE) {
       removeCard();
       document.removeEventListener('keydown', onPopupEscPress);
-      currentPin.classList.remove(window.constants.MAP_PIN_ACTIVE_CLASS);
-      activeCardId = null;
-      currentPin.blur();
+      window.currentPin.classList.remove(window.constants.MAP_PIN_ACTIVE_CLASS);
+      window.activeCardId = null;
+      window.currentPin.blur();
     }
   };
 
   var removeActiveCard = function () {
     removeCard();
 
-    if (currentPin) {
-      currentPin.classList.remove(window.constants.MAP_PIN_ACTIVE_CLASS);
-      activeCardId = null;
+    if (window.currentPin) {
+      window.currentPin.classList.remove(window.constants.MAP_PIN_ACTIVE_CLASS);
+      window.activeCardId = null;
     }
   };
 
   var createCard = function (id) {
-    activeCardId = id;
+    window.activeCardId = id;
     window.currentCard = window.elements.mapSection.appendChild(window.getCardData(window.advert[id]));
     document.addEventListener('keydown', onPopupEscPress);
   };
@@ -48,12 +48,12 @@
       document.removeEventListener('keydown', onPopupEscPress);
     }
 
-    if (!pinButton || (activeCardId === pinButton.dataset.id)) {
+    if (!pinButton || (window.activeCardId === pinButton.dataset.id)) {
       return;
     }
 
     removeActiveCard();
-    currentPin = pinButton;
+    window.currentPin = pinButton;
     createCard(pinButton.dataset.id);
     pinButton.classList.add(window.constants.MAP_PIN_ACTIVE_CLASS);
   };
