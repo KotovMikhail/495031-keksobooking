@@ -8,8 +8,14 @@
   var timeIn = window.elements.mapForm.querySelector('#timein');
   var timeOut = window.elements.mapForm.querySelector('#timeout');
   var housePrice = window.elements.mapForm.querySelector('#price');
-  var inputAddress = window.elements.mapForm.querySelector('#address');
   var options = capacity.querySelectorAll('option');
+  var successPopup = window.elements.successTemplate.cloneNode(true);
+  var errorPopup = window.elements.errorTemplate.cloneNode(true);
+  var errorButton = errorPopup.querySelector('.error__button');
+  var resetButton = window.elements.mapForm.querySelector('.ad-form__reset');
+  var featureCheckboxes = document.querySelectorAll('input[type=checkbox]');
+  var formDescription = window.elements.mapForm.querySelector('#description');
+  var titleAdvert = window.elements.mapForm.querySelector('#title');
 
   var onTimeInChange = function () {
     timeOut.value = timeIn.value;
@@ -54,14 +60,117 @@
     capacity.setCustomValidity('');
   });
 
-  window.setAddress = function () {
-    inputAddress.setAttribute('value', parseInt(window.elements.mainPin.style.left, 10) + ', ' + parseInt(window.elements.mainPin.style.top, 10));
+  var removeSuccessPopup = function () {
+    if (successPopup) {
+      window.elements.mapSection.removeChild(successPopup);
+    }
+    document.removeEventListener('keydown', onSuccessEscPress);
+    document.removeEventListener('click', onSuccessButtonClick);
   };
 
-  window.toggleDisabled = function (isDisabled, nodes) {
-    for (var i = 0; i < nodes.length; i++) {
-      nodes[i].disabled = isDisabled;
+  var onSuccessEscPress = function (evt) {
+    if (evt.keyCode === window.constants.ESC_KEYCODE) {
+      removeSuccessPopup();
     }
   };
+
+  var onSuccessButtonClick = function () {
+    removeSuccessPopup();
+  };
+
+  var onUploadSuccess = function () {
+    window.elements.mapSection.appendChild(successPopup);
+    onResetClick();
+    document.addEventListener('keyup', onSuccessEscPress);
+    document.addEventListener('click', onSuccessButtonClick);
+  };
+
+  var onEscErrorKeyup = function (evt) {
+    if (evt.keyCode === window.constants.ESC_KEYCODE) {
+      removeErrorListeners();
+    }
+  };
+
+  var onButtonErrorKeyup = function (evt) {
+    if (evt.keyCode === window.constants.ENTER_KEYCODE) {
+      removeErrorListeners();
+    }
+  };
+
+  var onButtonErrorClick = function () {
+    removeErrorListeners();
+  };
+
+  var removeErrorListeners = function () {
+    window.elements.mapSection.removeChild(errorPopup);
+    errorButton.removeEventListener('keyup', onButtonErrorKeyup);
+    document.removeEventListener('keyup', onEscErrorKeyup);
+    document.removeEventListener('click', onButtonErrorClick);
+  };
+
+  var onUploadError = function (errorMessage) {
+    errorPopup.querySelector('.error__message').textContent = errorMessage;
+    errorButton.focus();
+    errorButton.setAttribute('tabindex', '0');
+    errorButton.style.border = '2px solid yellow';
+    window.elements.mapSection.appendChild(errorPopup);
+
+    errorButton.addEventListener('keyup', onButtonErrorKeyup);
+    document.addEventListener('keyup', onEscErrorKeyup);
+    document.addEventListener('click', onButtonErrorClick);
+  };
+
+  window.elements.mapForm.addEventListener('submit', function (evt) {
+    window.backend.upload(new FormData(window.elements.mapForm), onUploadSuccess, onUploadError);
+    evt.preventDefault();
+  });
+
+  var resetMainPin = function () {
+    window.elements.mainPin.style.left = window.constants.PIN_LEFT_COORD + 'px';
+    window.elements.mainPin.style.top = window.constants.PIN_TOP_COORD + 'px';
+  };
+
+  var clearMap = function () {
+    var pins = window.elements.mapPinList.querySelectorAll('.map__pin:not(.map__pin--main)');
+    for (var i = 0; i < pins.length; i++) {
+      pins[i].remove(pins[i]);
+    }
+  };
+
+  var onResetClick = function () {
+    var openedCard = window.elements.mapSection.querySelector('.map__card');
+
+    featureCheckboxes.forEach(function (element) {
+      if (element.checked) {
+        element.checked = false;
+      }
+    });
+
+    if (openedCard) {
+      window.showCard.activeCardId = null;
+      window.showCard.currentPin = null;
+      window.showCard.currentCard = null;
+      window.elements.mapSection.removeChild(openedCard);
+    }
+
+    titleAdvert.value = '';
+    formDescription.value = '';
+    housePrice.setAttribute('placeholder', window.constants.MIN_PRICE);
+    housePrice.value = '';
+
+    window.elements.mapSection.classList.add('map--faded');
+    window.elements.advertForm.classList.add('ad-form--disabled');
+    window.util.toggleDisabled(true, window.elements.fieldsets);
+    window.util.toggleDisabled(true, window.elements.filterSelects);
+    capacity.selectedIndex = window.constants.CAPACITY_SELECTED;
+    roomNumber.selectedIndex = window.constants.ROOM_SELECTED;
+
+    clearMap();
+    resetMainPin();
+    window.util.setAddress();
+    window.elements.mainPin.addEventListener('mouseup', window.map.onButtonMouseUp);
+  };
+
+  resetButton.addEventListener('click', onResetClick);
 
 })();

@@ -22,7 +22,18 @@
         finalArr[j] = tmp;
       }
       return finalArr;
+    },
+
+    toggleDisabled: function (isDisabled, nodes) {
+      for (var i = 0; i < nodes.length; i++) {
+        nodes[i].disabled = isDisabled;
+      }
+    },
+
+    setAddress: function () {
+      window.elements.inputAddress.setAttribute('value', parseInt(window.elements.mainPin.style.left, 10) + ', ' + parseInt(window.elements.mainPin.style.top, 10));
     }
+
 
   };
 })();
