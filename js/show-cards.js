@@ -4,9 +4,10 @@
 
   window.showCard = {
     activeCardId: null,
-    currentPin: null,
     currentCard: null
   };
+
+  var currentPin = null;
 
   var removeCard = function () {
     if (window.showCard.currentCard) {
@@ -20,17 +21,17 @@
     if (evt.keyCode === window.constants.ESC_KEYCODE) {
       removeCard();
       document.removeEventListener('keydown', onPopupEscPress);
-      window.showCard.currentPin.classList.remove(window.constants.MAP_PIN_ACTIVE_CLASS);
+      currentPin.classList.remove(window.constants.MAP_PIN_ACTIVE_CLASS);
       window.showCard.activeCardId = null;
-      window.showCard.currentPin.blur();
+      currentPin.blur();
     }
   };
 
   var removeActiveCard = function () {
     removeCard();
 
-    if (window.showCard.currentPin) {
-      window.showCard.currentPin.classList.remove(window.constants.MAP_PIN_ACTIVE_CLASS);
+    if (currentPin) {
+      currentPin.classList.remove(window.constants.MAP_PIN_ACTIVE_CLASS);
       window.showCard.activeCardId = null;
     }
   };
@@ -56,7 +57,7 @@
     }
 
     removeActiveCard();
-    window.showCard.currentPin = pinButton;
+    currentPin = pinButton;
     createCard(pinButton.dataset.id);
     pinButton.classList.add(window.constants.MAP_PIN_ACTIVE_CLASS);
   };
