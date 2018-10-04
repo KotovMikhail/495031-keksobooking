@@ -1,5 +1,5 @@
 'use strict';
-// отображает карточку при клике на пин и закрывает карточку
+
 (function () {
 
   window.showCard = {
@@ -7,7 +7,6 @@
     currentPin: null,
     currentCard: null
   };
-
 
   var removeCard = function () {
     if (window.showCard.currentCard) {
@@ -38,7 +37,7 @@
 
   var createCard = function (id) {
     window.showCard.activeCardId = id;
-    window.showCard.currentCard = window.elements.mapSection.appendChild(window.getCardData(window.advert[id]));
+    window.showCard.currentCard = window.elements.mapSection.appendChild(window.getCardData(window.adverts[id]));
     document.addEventListener('keydown', onPopupEscPress);
   };
 

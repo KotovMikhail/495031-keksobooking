@@ -1,10 +1,10 @@
 'use strict';
 (function () {
-  window.widthMap = window.elements.mapPinList.offsetWidth;
-  var inputAddress = window.elements.mapForm.querySelector('#address');
+  var widthMap = window.elements.mapPinList.offsetWidth;
   var errorPopup = window.elements.errorTemplate.cloneNode(true);
   var errorButton = errorPopup.querySelector('.error__button');
   var messageContainer = errorPopup.querySelector('.error__message');
+
 
   window.elements.mainPin.addEventListener('mousedown', function (evt) {
 
@@ -32,8 +32,8 @@
 
       if (window.elements.mainPin.offsetLeft - shift.x < 0) {
         window.elements.mainPin.style.left = 0 + 'px';
-      } else if (window.elements.mainPin.offsetLeft - shift.x > window.widthMap - window.constants.PIN_WIDTH) {
-        window.elements.mainPin.style.left = window.widthMap - window.constants.PIN_WIDTH + 'px';
+      } else if (window.elements.mainPin.offsetLeft - shift.x > widthMap - window.constants.PIN_WIDTH) {
+        window.elements.mainPin.style.left = widthMap - window.constants.PIN_WIDTH + 'px';
       } else {
         window.elements.mainPin.style.left = (window.elements.mainPin.offsetLeft - shift.x) + 'px';
       }
@@ -47,7 +47,7 @@
       }
 
       if (!window.elements.mapSection.classList.contains('map--faded')) {
-        inputAddress.setAttribute('value', Math.floor(leftPin) + ', ' + Math.floor(topPin));
+        window.elements.inputAddress.setAttribute('value', Math.floor(leftPin) + ', ' + Math.floor(topPin));
       }
     };
 
@@ -74,25 +74,27 @@
     window.elements.mapPinList.appendChild(window.elements.fragmentPins);
   };
 
-  window.onButtonMouseUp = function () {
+  window.map = {
+    onButtonMouseUp: function () {
 
-    var onLoadSuccess = function (advert) {
-      window.advert = advert;
-      createPins(window.advert);
-    };
+      var onLoadSuccess = function (advert) {
+        window.adverts = advert;
+        createPins(window.adverts);
+      };
 
-    window.backend.load(onLoadSuccess, onLoadError);
+      window.backend.load(onLoadSuccess, onLoadError);
 
-    window.elements.mapSection.classList.remove('map--faded');
-    window.elements.advertForm.classList.remove('ad-form--disabled');
-    window.util.toggleDisabled(false, window.elements.fieldsets);
-    window.util.toggleDisabled(false, window.elements.filterSelects);
-    removeOnButtonMouseUp();
-    window.setAddress();
+      window.elements.mapSection.classList.remove('map--faded');
+      window.elements.advertForm.classList.remove('ad-form--disabled');
+      window.util.toggleDisabled(false, window.elements.fieldsets);
+      window.util.toggleDisabled(false, window.elements.filterSelects);
+      removeonButtonMouseUp();
+      window.util.setAddress();
+    }
   };
 
-  var removeOnButtonMouseUp = function () {
-    window.elements.mainPin.removeEventListener('mouseup', window.onButtonMouseUp);
+  var removeonButtonMouseUp = function () {
+    window.elements.mainPin.removeEventListener('mouseup', window.map.onButtonMouseUp);
   };
 
   var onEscErrorPress = function (evt) {
@@ -119,7 +121,6 @@
   };
 
   var onLoadError = function (errorMessage) {
-
     messageContainer.textContent = errorMessage;
     errorButton.setAttribute('tabindex', '0');
 
@@ -133,8 +134,8 @@
   var onLoadEnabled = function () {
     window.util.toggleDisabled(true, window.elements.fieldsets);
     window.util.toggleDisabled(true, window.elements.filterSelects);
-    window.elements.mainPin.addEventListener('mouseup', window.onButtonMouseUp);
-    window.setAddress();
+    window.elements.mainPin.addEventListener('mouseup', window.map.onButtonMouseUp);
+    window.util.setAddress();
   };
 
   window.addEventListener('load', onLoadEnabled);

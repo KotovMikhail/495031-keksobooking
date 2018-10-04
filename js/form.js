@@ -8,7 +8,6 @@
   var timeIn = window.elements.mapForm.querySelector('#timein');
   var timeOut = window.elements.mapForm.querySelector('#timeout');
   var housePrice = window.elements.mapForm.querySelector('#price');
-  var inputAddress = window.elements.mapForm.querySelector('#address');
   var options = capacity.querySelectorAll('option');
   var successPopup = window.elements.successTemplate.cloneNode(true);
   var errorPopup = window.elements.errorTemplate.cloneNode(true);
@@ -60,10 +59,6 @@
   capacity.addEventListener('change', function () {
     capacity.setCustomValidity('');
   });
-
-  window.setAddress = function () {
-    inputAddress.setAttribute('value', parseInt(window.elements.mainPin.style.left, 10) + ', ' + parseInt(window.elements.mainPin.style.top, 10));
-  };
 
   var removeSuccessPopup = function () {
     if (successPopup) {
@@ -172,8 +167,8 @@
 
     clearMap();
     resetMainPin();
-    window.setAddress();
-    window.elements.mainPin.addEventListener('mouseup', window.onButtonMouseUp);
+    window.util.setAddress();
+    window.elements.mainPin.addEventListener('mouseup', window.map.onButtonMouseUp);
   };
 
   resetButton.addEventListener('click', onResetClick);
