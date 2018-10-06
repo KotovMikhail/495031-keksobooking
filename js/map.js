@@ -61,25 +61,15 @@
     document.addEventListener('mouseup', onMouseUp);
   });
 
-  var createPins = function (icons) {
-    for (var i = 0; i < icons.length; i++) {
-      var pinElem = window.elements.pinTemplate.cloneNode(true);
-      pinElem.children[0].src = icons[i].author.avatar;
-      pinElem.dataset.id = i;
-      pinElem.style.left = icons[i].location.x + 'px';
-      pinElem.style.top = icons[i].location.y + 'px';
-      pinElem.children[0].alt = icons[i].offer.title;
-      window.elements.fragmentPins.appendChild(pinElem);
-    }
-    window.elements.mapPinList.appendChild(window.elements.fragmentPins);
-  };
+
 
   window.map = {
     onButtonMouseUp: function () {
 
       var onLoadSuccess = function (advert) {
         window.adverts = advert;
-        createPins(window.adverts);
+        console.log(window.adverts);
+        window.pin.createPins(window.adverts);
       };
 
       window.backend.load(onLoadSuccess, onLoadError);
