@@ -9,10 +9,21 @@
   var features = filterForm.querySelector('#housing-features');
 
   var removeMapArea = function () {
-    var allPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
-    allPins.forEach(function (it) {
+    var openedCard = window.elements.mapSection.querySelector('.map__card');
+    var visiblePins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+    visiblePins.forEach(function (it) {
       it.remove();
     });
+
+    if (openedCard) {
+      window.showCard.activeCardId = null;
+      window.showCard.currentCard = null;
+      window.elements.mapSection.removeChild(openedCard);
+    }
+  };
+
+  var typeSelection = function (selectType) {
+    return type.value === 'any' || selectType.offer.type === type.value;
   };
 
   var priceSelection = function (selectPrice) {
@@ -27,19 +38,44 @@
     }
   };
 
+  var roomsSelection = function (roomQuantity) {
+    return rooms.value === 'any' || roomQuantity.offer.rooms.toString() === rooms.value;
+  };
 
-  var typeSelection = function (selectType) {
-    console.log(type.value);
-    return selectType.offer.type === type.value;
+  var guestsSelection = function (selectGuests) {
+    return guests.value === 'any' || selectGuests.offer.guests.toString() === guests.value;
+  };
+
+  var featuresSelection = function (selectFeatures) {
+    var checkedElem = features.querySelectorAll('input[type=checkbox]:checked');
+    var checkedFeatures = [];
+
+    [].forEach.call(checkedElem, function (checkbox) {
+      if (checkbox.checked) {
+        checkedFeatures.push(checkbox.value);
+      }
+      return checkedFeatures;
+    });
+
+    return checkedFeatures.every(function (currentFeature) {
+      return selectFeatures.offer.features.includes(currentFeature);
+    });
   };
 
   var onFilterChange = function () {
+
     removeMapArea();
-    var filteredPins = window.adverts.filter(typeSelection);
+
+    var filteredPins = window.adverts
+      .filter(typeSelection)
+      .filter(priceSelection)
+      .filter(roomsSelection)
+      .filter(guestsSelection)
+      .filter(featuresSelection);
+
     window.pin.createPins(filteredPins);
   };
 
-  filterForm.addEventListener('change', onFilterChange);
-
+  filterForm.addEventListener('change', window.debounce(onFilterChange));
 
 })();

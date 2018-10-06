@@ -5,7 +5,6 @@
   var errorButton = errorPopup.querySelector('.error__button');
   var messageContainer = errorPopup.querySelector('.error__message');
 
-
   window.elements.mainPin.addEventListener('mousedown', function (evt) {
 
     evt.preventDefault();
@@ -61,14 +60,11 @@
     document.addEventListener('mouseup', onMouseUp);
   });
 
-
-
   window.map = {
     onButtonMouseUp: function () {
 
       var onLoadSuccess = function (advert) {
-        window.adverts = advert;
-        console.log(window.adverts);
+        window.adverts = window.util.shuffleArray(advert).splice(0, 5);
         window.pin.createPins(window.adverts);
       };
 
