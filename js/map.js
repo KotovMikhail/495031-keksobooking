@@ -5,7 +5,6 @@
   var errorButton = errorPopup.querySelector('.error__button');
   var messageContainer = errorPopup.querySelector('.error__message');
 
-
   window.elements.mainPin.addEventListener('mousedown', function (evt) {
 
     evt.preventDefault();
@@ -61,25 +60,12 @@
     document.addEventListener('mouseup', onMouseUp);
   });
 
-  var createPins = function (icons) {
-    for (var i = 0; i < icons.length; i++) {
-      var pinElem = window.elements.pinTemplate.cloneNode(true);
-      pinElem.children[0].src = icons[i].author.avatar;
-      pinElem.dataset.id = i;
-      pinElem.style.left = icons[i].location.x + 'px';
-      pinElem.style.top = icons[i].location.y + 'px';
-      pinElem.children[0].alt = icons[i].offer.title;
-      window.elements.fragmentPins.appendChild(pinElem);
-    }
-    window.elements.mapPinList.appendChild(window.elements.fragmentPins);
-  };
-
   window.map = {
     onButtonMouseUp: function () {
 
       var onLoadSuccess = function (advert) {
-        window.adverts = advert;
-        createPins(window.adverts);
+        window.adverts = window.util.shuffleArray(advert).splice(0, 5);
+        window.pin.createPins(window.adverts);
       };
 
       window.backend.load(onLoadSuccess, onLoadError);

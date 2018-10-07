@@ -1,0 +1,83 @@
+'use strict';
+
+(function () {
+  var filterForm = document.querySelector('.map__filters');
+  var type = filterForm.querySelector('#housing-type');
+  var price = filterForm.querySelector('#housing-price');
+  var rooms = filterForm.querySelector('#housing-rooms');
+  var guests = filterForm.querySelector('#housing-guests');
+  var features = filterForm.querySelector('#housing-features');
+
+  var removeMapArea = function () {
+    var openedCard = window.elements.mapSection.querySelector('.map__card');
+    var visiblePins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+    visiblePins.forEach(function (it) {
+      it.remove();
+    });
+
+    if (openedCard) {
+      window.showCard.activeCardId = null;
+      window.showCard.currentCard = null;
+      window.elements.mapSection.removeChild(openedCard);
+    }
+  };
+
+  var chooseTypes = function (selectType) {
+    return type.value === 'any' || selectType.offer.type === type.value;
+  };
+
+  var choosePrices = function (selectPrice) {
+    if (price.value === 'low') {
+      return selectPrice.offer.price < 10000;
+    } else if (price.value === 'middle') {
+      return selectPrice.offer.price >= 10000 && selectPrice.offer.price <= 50000;
+    } else if (price.value === 'high') {
+      return selectPrice.offer.price > 50000;
+    } else {
+      return true;
+    }
+  };
+
+  var chooseRooms = function (roomQuantity) {
+    return rooms.value === 'any' || roomQuantity.offer.rooms.toString() === rooms.value;
+  };
+
+  var chooseGuests = function (selectGuests) {
+    return guests.value === 'any' || selectGuests.offer.guests.toString() === guests.value;
+  };
+
+  var chooseFeatures = function (selectFeatures) {
+    var checkedElem = features.querySelectorAll('input[type=checkbox]:checked');
+    var checkedElemCopy = Array.prototype.slice.call(checkedElem);
+
+    var checkedFeatures = checkedElemCopy.reduce(function (prevValue, currentInput) {
+      var arr = [];
+      arr.push(currentInput.value);
+      return arr;
+
+    }, checkedElemCopy);
+
+    return checkedFeatures.every(function (currentFeature) {
+      return selectFeatures.offer.features.includes(currentFeature);
+    });
+  };
+
+  var onFilterChange = function () {
+
+    removeMapArea();
+
+    var filteredPins = window.adverts.filter(function (filtredData) {
+      var adType = chooseTypes(filtredData);
+      var adRooms = choosePrices(filtredData);
+      var adPrice = chooseRooms(filtredData);
+      var adGuests = chooseGuests(filtredData);
+      var adFeatures = chooseFeatures(filtredData);
+      return adType && adRooms && adPrice && adGuests && adFeatures;
+    });
+
+    window.pin.createPins(filteredPins);
+  };
+
+  filterForm.addEventListener('change', window.debounce(onFilterChange));
+
+})();

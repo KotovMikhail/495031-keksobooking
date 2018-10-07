@@ -148,7 +148,6 @@
 
     if (openedCard) {
       window.showCard.activeCardId = null;
-      window.showCard.currentPin = null;
       window.showCard.currentCard = null;
       window.elements.mapSection.removeChild(openedCard);
     }
