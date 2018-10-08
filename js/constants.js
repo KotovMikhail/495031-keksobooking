@@ -31,6 +31,7 @@
     CAPACITY_SELECTED: 2,
     ROOM_SELECTED: 0,
     DEBOUNCE_INTERVAL: 500,
+    FILE_TYPES: ['gif', 'jpg', 'jpeg', 'png'],
     TypesOfHouses: {
       'bungalo': {
         min: 0,

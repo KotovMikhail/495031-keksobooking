@@ -137,6 +137,17 @@
     }
   };
 
+  var resetImages = function () {
+    var photoImage = window.elements.photoContainer.querySelector('.ad-form__photo img');
+    if (window.elements.previewContainer.src !== 'img/muffin-grey.svg') {
+      window.elements.previewContainer.src = 'img/muffin-grey.svg';
+    }
+    if (photoImage) {
+      photoImage.remove();
+    }
+
+  };
+
   var onResetClick = function () {
     var openedCard = window.elements.mapSection.querySelector('.map__card');
 
@@ -163,7 +174,7 @@
     window.util.toggleDisabled(true, window.elements.filterSelects);
     capacity.selectedIndex = window.constants.CAPACITY_SELECTED;
     roomNumber.selectedIndex = window.constants.ROOM_SELECTED;
-
+    resetImages();
     clearMap();
     resetMainPin();
     window.util.setAddress();
