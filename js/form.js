@@ -138,14 +138,19 @@
   };
 
   var resetImages = function () {
-    var photoImage = window.elements.photoContainer.querySelector('.ad-form__photo img');
+    var photoImage = window.elements.photoContainer.querySelectorAll('.ad-form__photo');
+
     if (window.elements.previewContainer.src !== 'img/muffin-grey.svg') {
       window.elements.previewContainer.src = 'img/muffin-grey.svg';
     }
-    if (photoImage) {
-      photoImage.remove();
-    }
 
+    for (var i = 0; i < photoImage.length; i++) {
+      if (photoImage[i] === photoImage[0]) {
+        photoImage[i].removeChild(photoImage[i].firstChild);
+        continue;
+      }
+      photoImage[i].remove(photoImage[i]);
+    }
   };
 
   var onResetClick = function () {

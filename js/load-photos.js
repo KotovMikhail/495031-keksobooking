@@ -2,9 +2,16 @@
 
 (function () {
 
-  var avatarChooser = window.elements.avatarContainer.querySelector('input[type=file]');
-  var photoChooser = window.elements.photoContainer.querySelector('input[type=file]');
+  var imgChooser = window.elements.mapForm.querySelectorAll('input[type=file]');
   var photoForm = window.elements.photoContainer.querySelector('.ad-form__photo');
+
+  var createImg = function (tagname, res) {
+    var imgElement = document.createElement(tagname);
+    imgElement.src = res;
+    imgElement.style.width = '70px';
+    imgElement.style.height = '70px';
+    return imgElement;
+  };
 
   var onLoadChange = function (evt) {
 
@@ -22,14 +29,15 @@
       reader.addEventListener('load', function () {
         var result = reader.result;
 
-        if (fileChooser === avatarChooser) {
+        if (fileChooser === imgChooser[0]) {
           window.elements.previewContainer.src = result;
+        } else if (!photoForm.hasChildNodes()) {
+          photoForm.appendChild(createImg('img', result));
         } else {
-          var imgElement = document.createElement('img');
-          imgElement.src = result;
-          imgElement.style.width = '70px';
-          imgElement.style.height = '70px';
-          photoForm.appendChild(imgElement);
+          var divElement = document.createElement('div');
+          divElement.classList.add('ad-form__photo');
+          divElement.appendChild(createImg('img', result));
+          window.elements.photoContainer.appendChild(divElement);
         }
 
       });
@@ -37,6 +45,5 @@
     }
   };
 
-  avatarChooser.addEventListener('change', onLoadChange);
-  photoChooser.addEventListener('change', onLoadChange);
+  window.elements.mapForm.addEventListener('change', onLoadChange);
 })();
