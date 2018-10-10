@@ -27,34 +27,49 @@
     return fragmentPhotos;
   };
 
-  window.getCardData = function (item) {
-    var cardItem = window.elements.cardTemplate.cloneNode(true);
-    var roomPhrase = ' комнат для ';
-    var roomNum = item.offer.rooms;
-    var guestNum = item.offer.guests;
-    var guestPhrase = guestNum === 1 ? ' гостя' : ' гостей';
+  window.card = {
+    getCardData: function (item) {
+      var cardItem = window.elements.cardTemplate.cloneNode(true);
+      var roomPhrase = ' комнат для ';
+      var roomNum = item.offer.rooms;
+      var guestNum = item.offer.guests;
+      var guestPhrase = guestNum === 1 ? ' гостя' : ' гостей';
 
-    if (roomNum === 1) {
-      roomPhrase = ' комната для ';
-    } else if (roomNum > 1 && roomNum < 5) {
-      roomPhrase = ' комнаты для ';
+      if (roomNum === 1) {
+        roomPhrase = ' комната для ';
+      } else if (roomNum > 1 && roomNum < 5) {
+        roomPhrase = ' комнаты для ';
+      }
+
+      cardItem.querySelector('.popup__title').textContent = item.offer.title;
+      cardItem.querySelector('.popup__text--address').textContent = item.offer.address;
+      cardItem.querySelector('.popup__text--price').textContent = item.offer.price + '\u20BD' + '/ночь';
+      cardItem.querySelector('.popup__type').textContent = window.constants.TypesOfHouses[item.offer.type].translate;
+      if (item.offer.guests === 0) {
+        cardItem.querySelector('.popup__text--capacity').remove();
+      } else {
+        cardItem.querySelector('.popup__text--capacity').textContent = roomNum + roomPhrase + '' + guestNum + guestPhrase;
+      }
+
+      cardItem.querySelector('.popup__text--time').textContent = 'Заезд после ' + item.offer.checkin + ' выезд после ' + item.offer.checkout;
+
+      var cardFeatures = cardItem.querySelector('.popup__features');
+      if (item.offer.features.length === 0) {
+        cardFeatures.remove();
+      }
+      cardFeatures.innerHTML = '';
+      cardFeatures.appendChild(createFragmentFeatures(item.offer.features));
+      cardItem.querySelector('.popup__description').textContent = item.offer.description;
+      var cardPhotos = cardItem.querySelector('.popup__photos');
+      if (item.offer.photos.length === 0) {
+        cardPhotos.remove();
+      }
+      cardPhotos.innerHTML = '';
+      cardPhotos.appendChild(createFragmentPhotos(item.offer.photos));
+      cardItem.querySelector('.popup__avatar').src = item.author.avatar;
+      return cardItem;
     }
-
-    cardItem.querySelector('.popup__title').textContent = item.offer.title;
-    cardItem.querySelector('.popup__text--address').textContent = item.offer.address;
-    cardItem.querySelector('.popup__text--price').textContent = item.offer.price + '\u20BD' + '/ночь';
-    cardItem.querySelector('.popup__type').textContent = window.constants.TypesOfHouses[item.offer.type].translate;
-    cardItem.querySelector('.popup__text--capacity').textContent = roomNum + roomPhrase + ' для ' + guestNum + guestPhrase;
-    cardItem.querySelector('.popup__text--time').textContent = 'Заезд после ' + item.offer.checkin + ' выезд после ' + item.offer.checkout;
-    var cardFeatures = cardItem.querySelector('.popup__features');
-    cardFeatures.innerHTML = '';
-    cardFeatures.appendChild(createFragmentFeatures(item.offer.features));
-    cardItem.querySelector('.popup__description').textContent = item.offer.description;
-    var cardPhotos = cardItem.querySelector('.popup__photos');
-    cardPhotos.innerHTML = '';
-    cardPhotos.appendChild(createFragmentPhotos(item.offer.photos));
-    cardItem.querySelector('.popup__avatar').src = item.author.avatar;
-    return cardItem;
   };
+
 
 })();
