@@ -48,14 +48,10 @@
 
   var chooseFeatures = function (selectFeatures) {
     var checkedElem = features.querySelectorAll('input[type=checkbox]:checked');
-    var checkedElemCopy = Array.prototype.slice.call(checkedElem);
 
-    var checkedFeatures = checkedElemCopy.reduce(function (prevValue, currentInput) {
-      var arr = [];
-      arr.push(currentInput.value);
-      return arr;
-
-    }, checkedElemCopy);
+    var checkedFeatures = [].map.call(checkedElem, function (input) {
+      return input.value;
+    });
 
     return checkedFeatures.every(function (currentFeature) {
       return selectFeatures.offer.features.includes(currentFeature);
@@ -66,7 +62,7 @@
 
     removeMapArea();
 
-    var filteredPins = window.adverts.filter(function (filtredData) {
+    window.filteredPins = window.adverts.filter(function (filtredData) {
       var adType = chooseTypes(filtredData);
       var adRooms = choosePrices(filtredData);
       var adPrice = chooseRooms(filtredData);
@@ -75,7 +71,9 @@
       return adType && adRooms && adPrice && adGuests && adFeatures;
     });
 
-    window.pin.createPins(filteredPins);
+
+    window.pin.createPins(window.filteredPins);
+
   };
 
   filterForm.addEventListener('change', window.debounce(onFilterChange));

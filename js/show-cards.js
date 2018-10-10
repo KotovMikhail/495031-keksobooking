@@ -38,7 +38,7 @@
 
   var createCard = function (id) {
     window.showCard.activeCardId = id;
-    window.showCard.currentCard = window.elements.mapSection.appendChild(window.getCardData(window.adverts[id]));
+    window.showCard.currentCard = window.elements.mapSection.appendChild(window.card.getCardData(window.filteredPins[id]));
     document.addEventListener('keydown', onPopupEscPress);
   };
 

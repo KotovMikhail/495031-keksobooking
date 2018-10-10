@@ -144,27 +144,13 @@
       window.elements.previewContainer.src = 'img/muffin-grey.svg';
     }
 
-
     photos.forEach(function (element, index) {
-
-      if (element.hasChildNodes() && index === 0) {
-        element.removeChild(element.firstChild);
-      } else if (index > 0) {
+      if (index === 0) {
+        element.innerHTML = '';
+      } else {
         element.remove();
       }
-      return false;
-
-
     });
-
-    // for (var i = 0; i < photos.length; i++) {
-    //   if (photos[i] === photos[0]) {
-    //     photos[i].removeChild(photos[i].firstChild);
-    //     continue;
-    //   }
-    //   photos[i].remove();
-    // }
-
   };
 
   var onResetClick = function () {

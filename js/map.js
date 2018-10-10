@@ -64,7 +64,8 @@
     onButtonMouseUp: function () {
 
       var onLoadSuccess = function (advert) {
-        window.adverts = window.util.shuffleArray(advert).splice(0, 5);
+        window.sortedArray = window.util.shuffleArray(advert);
+        window.adverts = window.sortedArray.splice(0, 5);
         window.pin.createPins(window.adverts);
       };
 
