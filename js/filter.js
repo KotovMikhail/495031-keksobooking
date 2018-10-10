@@ -71,9 +71,7 @@
       return adType && adRooms && adPrice && adGuests && adFeatures;
     });
 
-
-    window.pin.createPins(window.filteredPins);
-
+    window.pin.createPins(window.filteredPins.slice(0, 5));
   };
 
   filterForm.addEventListener('change', window.debounce(onFilterChange));
