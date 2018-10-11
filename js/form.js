@@ -168,6 +168,7 @@
       window.elements.mapSection.removeChild(openedCard);
     }
 
+
     titleAdvert.value = '';
     formDescription.value = '';
     housePrice.setAttribute('placeholder', window.constants.MIN_PRICE);
@@ -183,8 +184,11 @@
     clearMap();
     resetMainPin();
     window.util.setAddress();
+
+
     window.elements.mainPin.addEventListener('mouseup', window.map.onButtonMouseUp);
   };
+
 
   resetButton.addEventListener('click', onResetClick);
 

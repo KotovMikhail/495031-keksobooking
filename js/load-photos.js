@@ -61,6 +61,7 @@
     }
   };
 
+
   avatarChooser.addEventListener('change', onAvatarLoad);
   photoChooser.addEventListener('change', onPhotoLoad);
 })();
