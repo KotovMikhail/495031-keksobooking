@@ -18,7 +18,7 @@
     filtersForm: document.querySelector('.map__filters'),
     avatarContainer: document.querySelector('.ad-form-header__upload'),
     previewContainer: document.querySelector('.ad-form-header__preview img'),
-    photoContainer: document.querySelector('.ad-form__photo-container')
-
+    photoContainer: document.querySelector('.ad-form__photo-container'),
+    filterForm: document.querySelector('.map__filters')
   };
 })();

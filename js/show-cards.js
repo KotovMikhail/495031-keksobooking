@@ -2,11 +2,6 @@
 
 (function () {
 
-  window.showCard = {
-    activeCardId: null,
-    currentCard: null
-  };
-
   var currentPin = null;
 
   var removeCard = function () {
@@ -62,6 +57,11 @@
     pinButton.classList.add(window.constants.MAP_PIN_ACTIVE_CLASS);
   };
 
-  window.elements.mapSection.addEventListener('click', showCard);
+
+  window.showCard = {
+    activeCardId: null,
+    currentCard: null,
+    renderAdvert: showCard
+  };
 
 })();
