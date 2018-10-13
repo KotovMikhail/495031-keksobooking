@@ -32,6 +32,15 @@
     ROOM_SELECTED: 0,
     DEBOUNCE_INTERVAL: 500,
     FILE_TYPES: ['gif', 'jpg', 'jpeg', 'png'],
+    SUCCESS_REQ: 200,
+    FAILED_REQ: 400,
+    BAD_REQ: 404,
+    URL_GET: 'https://js.dump.academy/keksobooking/data',
+    URL_POST: 'https://js.dump.academy/keksobooking',
+    MIN_OFFER_PRICE: 10000,
+    MAX_OFFER_PRICE: 50000,
+    MAX_QUANTITY_PINS: 5,
+    RUBLE_SYMBOL: '\u20BD',
     TypesOfHouses: {
       'bungalo': {
         min: 0,

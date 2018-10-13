@@ -1,29 +1,29 @@
 'use strict';
-// создаёт карточку и экспротирует её в show-card.js
+
 (function () {
 
   var createFragmentFeatures = function (facilities) {
     var fragmentFeatures = document.createDocumentFragment();
-    for (var i = 0; i < facilities.length; i++) {
+    facilities.forEach(function (elem) {
       var li = document.createElement('li');
       li.classList.add('popup__feature');
-      var classAdded = 'popup__feature--' + facilities[i];
+      var classAdded = 'popup__feature--' + elem;
       li.classList.add(classAdded);
       fragmentFeatures.appendChild(li);
-    }
+    });
     return fragmentFeatures;
   };
 
   var createFragmentPhotos = function (pins) {
     var fragmentPhotos = document.createDocumentFragment();
-    for (var i = 0; i < pins.length; i++) {
+    pins.forEach(function (pin) {
       var img = document.createElement('img');
-      img.src = pins[i];
+      img.src = pin;
       img.width = window.constants.AVATAR_WIDTH;
       img.height = window.constants.AVATAR_HEIGHT;
       img.classList.add('popup__photo');
       fragmentPhotos.appendChild(img);
-    }
+    });
     return fragmentPhotos;
   };
 
@@ -33,17 +33,17 @@
       var roomPhrase = ' комнат для ';
       var roomNum = item.offer.rooms;
       var guestNum = item.offer.guests;
-      var guestPhrase = guestNum === 1 ? ' гостя' : ' гостей';
+      var guestPhrase = guestNum === window.constants.MIN_GUESTS ? ' гостя' : ' гостей';
 
-      if (roomNum === 1) {
+      if (roomNum === window.constants.MIN_ROOM) {
         roomPhrase = ' комната для ';
-      } else if (roomNum > 1 && roomNum < 5) {
+      } else if (roomNum > window.constants.MIN_ROOM && roomNum < window.constants.MAX_ROOM) {
         roomPhrase = ' комнаты для ';
       }
 
       cardItem.querySelector('.popup__title').textContent = item.offer.title;
       cardItem.querySelector('.popup__text--address').textContent = item.offer.address;
-      cardItem.querySelector('.popup__text--price').textContent = item.offer.price + '\u20BD' + '/ночь';
+      cardItem.querySelector('.popup__text--price').textContent = item.offer.price + window.constants.RUBLE_SYMBOL + '/ночь';
       cardItem.querySelector('.popup__type').textContent = window.constants.TypesOfHouses[item.offer.type].translate;
       if (item.offer.guests === 0) {
         cardItem.querySelector('.popup__text--capacity').remove();

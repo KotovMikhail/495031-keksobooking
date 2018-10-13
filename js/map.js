@@ -65,7 +65,7 @@
 
       var onLoadSuccess = function (advert) {
         window.adverts = advert;
-        window.filteredPins = window.util.shuffleArray(advert).splice(0, 5);
+        window.filteredPins = window.util.shuffleArray(advert).splice(0, window.constants.MAX_QUANTITY_PINS);
         window.pin.createPins(window.filteredPins);
       };
 
@@ -78,7 +78,7 @@
       removeonButtonMouseUp();
       window.util.setAddress();
       window.elements.mapSection.addEventListener('click', window.showCard.renderAdvert);
-      window.elements.filterForm.addEventListener('change', window.filter.onFilterChange);
+      window.elements.filterForm.addEventListener('change', window.filter.onFormAdvertChange);
     }
   };
 

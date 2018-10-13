@@ -16,11 +16,9 @@
       it.remove();
     });
 
-    if (openedCard) {
-      window.showCard.activeCardId = null;
-      window.showCard.currentCard = null;
-      window.elements.mapSection.removeChild(openedCard);
-    }
+    window.showCard.findOpenedAdvert(openedCard);
+
+    document.removeEventListener('keydown', window.showCard.removeEscape);
   };
 
   var chooseTypes = function (selectType) {
@@ -29,11 +27,11 @@
 
   var choosePrices = function (selectPrice) {
     if (price.value === 'low') {
-      return selectPrice.offer.price < 10000;
+      return selectPrice.offer.price < window.constants.MIN_OFFER_PRICE;
     } else if (price.value === 'middle') {
-      return selectPrice.offer.price >= 10000 && selectPrice.offer.price <= 50000;
+      return selectPrice.offer.price >= window.constants.MIN_OFFER_PRICE && selectPrice.offer.price <= window.constants.MAX_OFFER_PRICE;
     } else if (price.value === 'high') {
-      return selectPrice.offer.price > 50000;
+      return selectPrice.offer.price > window.constants.MAX_OFFER_PRICE;
     } else {
       return true;
     }
@@ -59,7 +57,6 @@
     });
   };
 
-
   var onFormFilterChange = function () {
 
     removeMapArea();
@@ -72,14 +69,25 @@
       var adFeatures = chooseFeatures(filtredData);
       return adType && adRooms && adPrice && adGuests && adFeatures;
     });
-    window.pin.createPins(window.filteredPins.slice(0, 5));
-  };
 
+    var shuffledPins = window.util.shuffleArray(window.filteredPins);
+
+    window.pin.createPins(shuffledPins.slice(0, window.constants.MAX_QUANTITY_PINS));
+
+    var flagPin = window.elements.mapPinList.querySelector('.map__pin:not(.map__pin--main)');
+
+    if (flagPin) {
+      window.elements.mapSection.addEventListener('click', window.showCard.renderAdvert);
+    } else {
+      window.elements.mapSection.removeEventListener('click', window.showCard.renderAdvert);
+    }
+
+  };
 
   window.filter = {
-    onFilterChange: window.debounce(onFormFilterChange)
+    onFormAdvertChange: window.debounce(onFormFilterChange)
   };
 
-  window.elements.filterForm.addEventListener('change', window.filter.onFilterChange);
+  window.elements.filterForm.addEventListener('change', window.filter.onFormAdvertChange);
 
 })();

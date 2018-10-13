@@ -1,8 +1,6 @@
 'use strict';
 
 (function () {
-  var URL_GET = 'https://js.dump.academy/keksobooking/data';
-  var URL_POST = 'https://js.dump.academy/keksobooking';
 
   var getXhrData = function (onLoad, onError) {
     var xhr = new XMLHttpRequest();
@@ -10,13 +8,13 @@
 
     xhr.addEventListener('load', function () {
       switch (xhr.status) {
-        case 200:
+        case window.constants.SUCCESS_REQ:
           onLoad(xhr.response);
           break;
-        case 400:
+        case window.constants.FAILED_REQ:
           onError('Неверный запрос');
           break;
-        case 404:
+        case window.constants.BAD_REQ:
           onError('Ничего не найдено');
           break;
         default:
@@ -39,14 +37,14 @@
     load: function (onLoad, onError) {
       var xhr = getXhrData(onLoad, onError);
 
-      xhr.open('GET', URL_GET);
+      xhr.open('GET', window.constants.URL_GET);
       xhr.send();
 
     },
     upload: function (data, onLoad, onError) {
       var xhr = getXhrData(onLoad, onError);
 
-      xhr.open('POST', URL_POST);
+      xhr.open('POST', window.constants.URL_POST);
       xhr.send(data);
     }
   };

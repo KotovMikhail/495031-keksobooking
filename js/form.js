@@ -60,22 +60,22 @@
     capacity.setCustomValidity('');
   });
 
-
+  var removeSuccessPopup = function () {
+    if (successPopup) {
+      window.elements.mapSection.removeChild(successPopup);
+    }
+    document.removeEventListener('keyup', onSuccessEscPress);
+    document.removeEventListener('click', onSuccessButtonClick);
+  };
 
   var onSuccessEscPress = function (evt) {
-    if (successPopup) {
-      if (evt.keyCode === window.constants.ESC_KEYCODE) {
-        window.elements.mapSection.removeChild(successPopup);
-        document.removeEventListener('keydown', onSuccessEscPress);
-        document.removeEventListener('click', onSuccessButtonClick);
-      }
+    if (evt.keyCode === window.constants.ESC_KEYCODE) {
+      removeSuccessPopup();
     }
-
   };
 
   var onSuccessButtonClick = function () {
-    // removeSuccessPopup();
-
+    removeSuccessPopup();
   };
 
   var onUploadSuccess = function () {
@@ -122,11 +122,8 @@
 
   window.elements.mapForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
-
     window.backend.upload(new FormData(window.elements.mapForm), onUploadSuccess, onUploadError);
     window.elements.mapSection.removeEventListener('click', window.showCard.renderAdvert);
-    document.removeEventListener('click', onSuccessButtonClick);
-
   });
 
   var resetMainPin = function () {
@@ -166,12 +163,7 @@
       }
     });
 
-    if (openedCard) {
-      window.showCard.activeCardId = null;
-      window.showCard.currentCard = null;
-      window.elements.mapSection.removeChild(openedCard);
-    }
-
+    window.showCard.findOpenedAdvert(openedCard);
 
     titleAdvert.value = '';
     formDescription.value = '';
@@ -189,7 +181,7 @@
     resetMainPin();
     window.util.setAddress();
     window.elements.mapSection.removeEventListener('click', window.showCard.renderAdvert);
-    window.elements.filterForm.removeEventListener('change', window.filter.onFilterChange);
+    window.elements.filterForm.removeEventListener('change', window.filter.onFormAdvertChange);
     window.elements.mainPin.addEventListener('mouseup', window.map.onButtonMouseUp);
   };
 

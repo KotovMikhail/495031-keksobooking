@@ -34,6 +34,5 @@
       window.elements.inputAddress.setAttribute('value', parseInt(window.elements.mainPin.style.left, 10) + ', ' + parseInt(window.elements.mainPin.style.top, 10));
     }
 
-
   };
 })();
