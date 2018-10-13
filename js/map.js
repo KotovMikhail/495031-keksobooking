@@ -121,12 +121,10 @@
     window.elements.mapSection.appendChild(errorPopup);
   };
 
-  var onLoadEnabled = function () {
-    window.util.toggleDisabled(true, window.elements.fieldsets);
-    window.util.toggleDisabled(true, window.elements.filterSelects);
-    window.elements.mainPin.addEventListener('mouseup', window.map.onButtonMouseUp);
-    window.util.setAddress();
-  };
+  window.util.toggleDisabled(true, window.elements.fieldsets);
+  window.util.toggleDisabled(true, window.elements.filterSelects);
+  window.util.setAddress();
 
-  window.addEventListener('load', onLoadEnabled);
+  window.elements.mainPin.addEventListener('mouseup', window.map.onButtonMouseUp);
+
 })();
