@@ -66,7 +66,6 @@
       }
     },
     activeAdvert: null,
-    currentAdvert: null,
     renderAdvert: showAdvert,
     removeEscape: onPopupEscPress
   };

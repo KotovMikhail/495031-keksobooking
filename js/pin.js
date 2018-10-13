@@ -2,6 +2,7 @@
 (function () {
 
   window.pin = {
+    visible: [],
     createPins: function (icons) {
       icons.forEach(function (pin, i) {
         var pinElem = window.elements.pinTemplate.cloneNode(true);
@@ -10,9 +11,13 @@
         pinElem.style.left = Math.floor(pin.location.x - window.constants.PIN_WIDTH / 2) + 'px';
         pinElem.style.top = pin.location.y + 'px';
         pinElem.children[0].alt = pin.offer.title;
+        window.pin.visible.push(pinElem);
         window.elements.fragmentPins.appendChild(pinElem);
       });
+
       window.elements.mapPinList.appendChild(window.elements.fragmentPins);
+
     }
+
   };
 })();

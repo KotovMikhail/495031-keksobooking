@@ -8,15 +8,13 @@
   var guests = window.elements.filterForm.querySelector('#housing-guests');
   var features = window.elements.filterForm.querySelector('#housing-features');
 
-
   var removeMapArea = function () {
-    var openedCard = window.elements.mapSection.querySelector('.map__card');
-    var visiblePins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
-    visiblePins.forEach(function (it) {
+
+    window.pin.visible.forEach(function (it) {
       it.remove();
     });
 
-    window.showCard.findOpenedAdvert(openedCard);
+    window.showCard.findOpenedAdvert(window.showCard.currentAdvert);
 
     document.removeEventListener('keydown', window.showCard.removeEscape);
   };

@@ -155,7 +155,6 @@
   };
 
   var onResetClick = function () {
-    var openedCard = window.elements.mapSection.querySelector('.map__card');
 
     featureCheckboxes.forEach(function (element) {
       if (element.checked) {
@@ -163,7 +162,7 @@
       }
     });
 
-    window.showCard.findOpenedAdvert(openedCard);
+    window.showCard.findOpenedAdvert(window.showCard.currentAdvert);
 
     titleAdvert.value = '';
     formDescription.value = '';
