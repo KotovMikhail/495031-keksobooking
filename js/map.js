@@ -77,8 +77,9 @@
       window.util.toggleDisabled(false, window.elements.filterSelects);
       removeonButtonMouseUp();
       window.util.setAddress();
-      window.elements.mapSection.addEventListener('click', window.showCard.renderAdvert);
-      window.elements.filterForm.addEventListener('change', window.filter.onFormAdvertChange);
+      window.elements.filterForm.addEventListener('change', window.filter.onMapFormChange);
+      window.elements.mapSection.addEventListener('click', window.showCard.onPinClick);
+      window.elements.filterForm.addEventListener('change', window.filter.onMapFormChange);
     }
   };
 

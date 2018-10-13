@@ -15,7 +15,6 @@
     errorTemplate: document.querySelector('#error').content.querySelector('.error'),
     successTemplate: document.querySelector('#success').content.querySelector('.success'),
     inputAddress: document.querySelector('#address'),
-    filtersForm: document.querySelector('.map__filters'),
     avatarContainer: document.querySelector('.ad-form-header__upload'),
     previewContainer: document.querySelector('.ad-form-header__preview img'),
     photoContainer: document.querySelector('.ad-form__photo-container'),

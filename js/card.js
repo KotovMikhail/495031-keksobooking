@@ -14,11 +14,11 @@
     return fragmentFeatures;
   };
 
-  var createFragmentPhotos = function (pins) {
+  var createFragmentPhotos = function (photos) {
     var fragmentPhotos = document.createDocumentFragment();
-    pins.forEach(function (pin) {
+    photos.forEach(function (photo) {
       var img = document.createElement('img');
-      img.src = pin;
+      img.src = photo;
       img.width = window.constants.AVATAR_WIDTH;
       img.height = window.constants.AVATAR_HEIGHT;
       img.classList.add('popup__photo');
@@ -30,15 +30,15 @@
   window.card = {
     getCardData: function (item) {
       var cardItem = window.elements.cardTemplate.cloneNode(true);
-      var roomPhrase = ' комнат для ';
+      var roomPhrase = window.constants.Phrases.roomMoreThenFive;
       var roomNum = item.offer.rooms;
       var guestNum = item.offer.guests;
-      var guestPhrase = guestNum === window.constants.MIN_GUESTS ? ' гостя' : ' гостей';
+      var guestPhrase = guestNum === window.constants.MIN_GUESTS ? window.constants.Phrases.guest : window.constants.Phrases.guests;
 
       if (roomNum === window.constants.MIN_ROOM) {
-        roomPhrase = ' комната для ';
+        roomPhrase = window.constants.Phrases.roomForOne;
       } else if (roomNum > window.constants.MIN_ROOM && roomNum < window.constants.MAX_ROOM) {
-        roomPhrase = ' комнаты для ';
+        roomPhrase = window.constants.Phrases.roomMoreThenOne;
       }
 
       cardItem.querySelector('.popup__title').textContent = item.offer.title;
@@ -51,7 +51,7 @@
         cardItem.querySelector('.popup__text--capacity').textContent = roomNum + roomPhrase + '' + guestNum + guestPhrase;
       }
 
-      cardItem.querySelector('.popup__text--time').textContent = 'Заезд после ' + item.offer.checkin + ' выезд после ' + item.offer.checkout;
+      cardItem.querySelector('.popup__text--time').textContent = window.constants.Phrases.arrivalLater + item.offer.checkin + window.constants.Phrases.departureLater + item.offer.checkout;
 
       var cardFeatures = cardItem.querySelector('.popup__features');
       if (item.offer.features.length === 0) {

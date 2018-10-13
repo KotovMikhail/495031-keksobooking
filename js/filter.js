@@ -10,25 +10,27 @@
 
   var removeMapArea = function () {
 
-    window.pin.visible.forEach(function (it) {
-      it.remove();
+    window.pin.visible.forEach(function (pin) {
+      pin.remove();
     });
 
-    window.showCard.findOpenedAdvert(window.showCard.currentAdvert);
+    window.pin.visible = [];
+
+    window.showCard.closeOpenedAdvert(window.showCard.currentAdvert);
 
     document.removeEventListener('keydown', window.showCard.removeEscape);
   };
 
   var chooseTypes = function (selectType) {
-    return type.value === 'any' || selectType.offer.type === type.value;
+    return type.value === window.constants.Phrases.any || selectType.offer.type === type.value;
   };
 
   var choosePrices = function (selectPrice) {
-    if (price.value === 'low') {
+    if (price.value === window.constants.Phrases.low) {
       return selectPrice.offer.price < window.constants.MIN_OFFER_PRICE;
-    } else if (price.value === 'middle') {
+    } else if (price.value === window.constants.Phrases.middle) {
       return selectPrice.offer.price >= window.constants.MIN_OFFER_PRICE && selectPrice.offer.price <= window.constants.MAX_OFFER_PRICE;
-    } else if (price.value === 'high') {
+    } else if (price.value === window.constants.Phrases.high) {
       return selectPrice.offer.price > window.constants.MAX_OFFER_PRICE;
     } else {
       return true;
@@ -36,15 +38,15 @@
   };
 
   var chooseRooms = function (roomQuantity) {
-    return rooms.value === 'any' || roomQuantity.offer.rooms.toString() === rooms.value;
+    return rooms.value === window.constants.Phrases.any || roomQuantity.offer.rooms.toString() === rooms.value;
   };
 
   var chooseGuests = function (selectGuests) {
-    return guests.value === 'any' || selectGuests.offer.guests.toString() === guests.value;
+    return guests.value === window.constants.Phrases.any || selectGuests.offer.guests.toString() === guests.value;
   };
 
   var chooseFeatures = function (selectFeatures) {
-    var checkedElem = features.querySelectorAll('input[type=checkbox]:checked');
+    var checkedElem = features.querySelectorAll(window.constants.CHECKED_FEATURE);
 
     var checkedFeatures = [].map.call(checkedElem, function (input) {
       return input.value;
@@ -55,7 +57,7 @@
     });
   };
 
-  var onFormFilterChange = function () {
+  var onMapFormChange = function () {
 
     removeMapArea();
 
@@ -72,20 +74,18 @@
 
     window.pin.createPins(shuffledPins.slice(0, window.constants.MAX_QUANTITY_PINS));
 
-    var flagPin = window.elements.mapPinList.querySelector('.map__pin:not(.map__pin--main)');
-
-    if (flagPin) {
-      window.elements.mapSection.addEventListener('click', window.showCard.renderAdvert);
+    if (window.filteredPins.length === 0) {
+      document.removeEventListener('keydown', window.showCard.onEscRemoveAdvert);
+      window.elements.mapSection.removeEventListener('click', window.showCard.onPinClick);
     } else {
-      window.elements.mapSection.removeEventListener('click', window.showCard.renderAdvert);
+      document.addEventListener('keydown', window.showCard.onEscRemoveAdvert);
+      window.elements.mapSection.addEventListener('click', window.showCard.onPinClick);
     }
 
   };
 
   window.filter = {
-    onFormAdvertChange: window.debounce(onFormFilterChange)
+    onMapFormChange: window.debounce(onMapFormChange)
   };
-
-  window.elements.filterForm.addEventListener('change', window.filter.onFormAdvertChange);
 
 })();

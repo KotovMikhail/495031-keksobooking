@@ -64,6 +64,8 @@
     if (successPopup) {
       window.elements.mapSection.removeChild(successPopup);
     }
+    document.removeEventListener('keydown', window.showCard.onEscRemoveAdvert);
+    window.elements.filterForm.removeEventListener('change', window.filter.onMapFormChange);
     document.removeEventListener('keyup', onSuccessEscPress);
     document.removeEventListener('click', onSuccessButtonClick);
   };
@@ -103,6 +105,8 @@
 
   var removeErrorListeners = function () {
     window.elements.mapSection.removeChild(errorPopup);
+    document.removeEventListener('keydown', window.showCard.onEscRemoveAdvert);
+    window.elements.filterForm.removeEventListener('change', window.filter.onMapFormChange);
     errorButton.removeEventListener('keyup', onButtonErrorKeyup);
     document.removeEventListener('keyup', onEscErrorKeyup);
     document.removeEventListener('click', onButtonErrorClick);
@@ -123,7 +127,7 @@
   window.elements.mapForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
     window.backend.upload(new FormData(window.elements.mapForm), onUploadSuccess, onUploadError);
-    window.elements.mapSection.removeEventListener('click', window.showCard.renderAdvert);
+    window.elements.mapSection.removeEventListener('click', window.showCard.onPinClick);
   });
 
   var resetMainPin = function () {
@@ -141,8 +145,8 @@
   var resetImages = function () {
     var photos = window.elements.photoContainer.querySelectorAll('.ad-form__photo');
 
-    if (window.elements.previewContainer.src !== 'img/muffin-grey.svg') {
-      window.elements.previewContainer.src = 'img/muffin-grey.svg';
+    if (window.elements.previewContainer.src !== window.constants.MAFFIN_GREY_SRC) {
+      window.elements.previewContainer.src = window.constants.MAFFIN_GREY_SRC;
     }
 
     photos.forEach(function (element, index) {
@@ -162,7 +166,7 @@
       }
     });
 
-    window.showCard.findOpenedAdvert(window.showCard.currentAdvert);
+    window.showCard.closeOpenedAdvert(window.showCard.currentAdvert);
 
     titleAdvert.value = '';
     formDescription.value = '';
@@ -179,8 +183,9 @@
     clearMap();
     resetMainPin();
     window.util.setAddress();
-    window.elements.mapSection.removeEventListener('click', window.showCard.renderAdvert);
-    window.elements.filterForm.removeEventListener('change', window.filter.onFormAdvertChange);
+    document.removeEventListener('keydown', window.showCard.onEscRemoveAdvert);
+    window.elements.mapSection.removeEventListener('click', window.showCard.onPinClick);
+    window.elements.filterForm.removeEventListener('change', window.filter.onMapFormChange);
     window.elements.mainPin.addEventListener('mouseup', window.map.onButtonMouseUp);
   };
 
