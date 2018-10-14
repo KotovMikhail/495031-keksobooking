@@ -77,18 +77,17 @@
       }
     },
     Phrases: {
-      any: 'any',
-      low: 'low',
-      middle: 'middle',
-      high: 'high',
-      arrivalLater: 'Заезд после ',
-      departureLater: ' выезд после ',
-      guest: ' гостя',
-      guests: ' гостей',
-      roomForOne: ' комната для ',
-      roomMoreThenOne: ' комнаты для ',
-      roomMoreThenFive: ' комнат для '
-
+      ANY: 'any',
+      LOW: 'low',
+      MIDDLE: 'middle',
+      HIGH: 'high',
+      ARRIVAL_LATER: 'Заезд после ',
+      DEPARTURE_LATER: ' выезд после ',
+      GUEST: ' гостя',
+      GUESTS: ' гостей',
+      ROOM_FOR_ONE: ' комната для ',
+      ROOM_MORE_THEN_ONE: ' комнаты для ',
+      ROOM_MORE_THEN_FIVE: ' комнат для '
     }
 
   };

@@ -14,7 +14,7 @@
   var onEscRemoveAdvert = function (evt) {
     if (evt.keyCode === window.constants.ESC_KEYCODE) {
       removeCard();
-      document.removeEventListener('keydown', window.showCard.removeEscape);
+      document.removeEventListener('keydown', window.showCard.onEscRemoveAdvert);
       currentPin.classList.remove(window.constants.MAP_PIN_ACTIVE_CLASS);
       window.showCard.activeAdvert = null;
       currentPin.blur();

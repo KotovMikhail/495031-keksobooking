@@ -30,15 +30,15 @@
   window.card = {
     getCardData: function (item) {
       var cardItem = window.elements.cardTemplate.cloneNode(true);
-      var roomPhrase = window.constants.Phrases.roomMoreThenFive;
+      var roomPhrase = window.constants.Phrases.ROOM_MORE_THEN_FIVE;
       var roomNum = item.offer.rooms;
       var guestNum = item.offer.guests;
-      var guestPhrase = guestNum === window.constants.MIN_GUESTS ? window.constants.Phrases.guest : window.constants.Phrases.guests;
+      var guestPhrase = guestNum === window.constants.MIN_GUESTS ? window.constants.Phrases.GUEST : window.constants.Phrases.GUESTS;
 
       if (roomNum === window.constants.MIN_ROOM) {
-        roomPhrase = window.constants.Phrases.roomForOne;
+        roomPhrase = window.constants.Phrases.ROOM_FOR_ONE;
       } else if (roomNum > window.constants.MIN_ROOM && roomNum < window.constants.MAX_ROOM) {
-        roomPhrase = window.constants.Phrases.roomMoreThenOne;
+        roomPhrase = window.constants.Phrases.ROOM_MORE_THEN_ONE;
       }
 
       cardItem.querySelector('.popup__title').textContent = item.offer.title;

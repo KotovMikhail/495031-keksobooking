@@ -18,19 +18,19 @@
 
     window.showCard.closeOpenedAdvert(window.showCard.currentAdvert);
 
-    document.removeEventListener('keydown', window.showCard.removeEscape);
+
   };
 
   var chooseTypes = function (selectType) {
-    return type.value === window.constants.Phrases.any || selectType.offer.type === type.value;
+    return type.value === window.constants.Phrases.ANY || selectType.offer.type === type.value;
   };
 
   var choosePrices = function (selectPrice) {
-    if (price.value === window.constants.Phrases.low) {
+    if (price.value === window.constants.Phrases.LOW) {
       return selectPrice.offer.price < window.constants.MIN_OFFER_PRICE;
-    } else if (price.value === window.constants.Phrases.middle) {
+    } else if (price.value === window.constants.Phrases.MIDDLE) {
       return selectPrice.offer.price >= window.constants.MIN_OFFER_PRICE && selectPrice.offer.price <= window.constants.MAX_OFFER_PRICE;
-    } else if (price.value === window.constants.Phrases.high) {
+    } else if (price.value === window.constants.Phrases.HIGH) {
       return selectPrice.offer.price > window.constants.MAX_OFFER_PRICE;
     } else {
       return true;
@@ -38,11 +38,11 @@
   };
 
   var chooseRooms = function (roomQuantity) {
-    return rooms.value === window.constants.Phrases.any || roomQuantity.offer.rooms.toString() === rooms.value;
+    return rooms.value === window.constants.Phrases.ANY || roomQuantity.offer.rooms.toString() === rooms.value;
   };
 
   var chooseGuests = function (selectGuests) {
-    return guests.value === window.constants.Phrases.any || selectGuests.offer.guests.toString() === guests.value;
+    return guests.value === window.constants.Phrases.ANY || selectGuests.offer.guests.toString() === guests.value;
   };
 
   var chooseFeatures = function (selectFeatures) {
