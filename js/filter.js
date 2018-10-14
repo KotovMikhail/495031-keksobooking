@@ -60,8 +60,8 @@
   var onMapFormChange = function () {
 
     removeMapArea();
-
-    window.filteredPins = window.adverts.filter(function (filtredData) {
+    window.shufledPins = window.util.shuffleArray(window.adverts);
+    window.filteredPins = window.shufledPins.filter(function (filtredData) {
       var adType = chooseTypes(filtredData);
       var adRooms = choosePrices(filtredData);
       var adPrice = chooseRooms(filtredData);
@@ -70,9 +70,7 @@
       return adType && adRooms && adPrice && adGuests && adFeatures;
     });
 
-    var shuffledPins = window.util.shuffleArray(window.filteredPins);
-
-    window.pin.createPins(shuffledPins.slice(0, window.constants.MAX_QUANTITY_PINS));
+    window.pin.createPins(window.filteredPins.slice(0, window.constants.MAX_QUANTITY_PINS));
 
     if (window.filteredPins.length === 0) {
       document.removeEventListener('keydown', window.showCard.onEscRemoveAdvert);

@@ -51,7 +51,7 @@
         cardItem.querySelector('.popup__text--capacity').textContent = roomNum + roomPhrase + '' + guestNum + guestPhrase;
       }
 
-      cardItem.querySelector('.popup__text--time').textContent = window.constants.Phrases.arrivalLater + item.offer.checkin + window.constants.Phrases.departureLater + item.offer.checkout;
+      cardItem.querySelector('.popup__text--time').textContent = window.constants.Phrases.ARRIVAL_LATER + item.offer.checkin + window.constants.Phrases.DEPARTURE_LATER + item.offer.checkout;
 
       var cardFeatures = cardItem.querySelector('.popup__features');
       if (item.offer.features.length === 0) {
